@@ -98,16 +98,22 @@ sub detect_gender {
     return $MASCULINE if $surname =~ /[иы]ч$/;
 
     # Detect by firstname
-    # Process exceptions
-    foreach my $name ( @Lingua::RU::Inflect::Exceptions::MASCULINE_NAMES ) {
-        return $MASCULINE if $firstname eq $name;
-    }
+    # Drop all names except first
+    $firstname =~ s/[\s\-].*//;
 
-    foreach my $name ( @Lingua::RU::Inflect::Exceptions::FEMININE_NAMES ) {
-        return $FEMININE if $firstname eq $name;
-    }
+    # Process exceptions
+    map {
+        return $MASCULINE if $firstname eq $_;
+    } ( @Lingua::RU::Inflect::Exceptions::MASCULINE_NAMES );
+
+    map {
+        return $FEMININE if $firstname eq $_;
+    } ( @Lingua::RU::Inflect::Exceptions::FEMININE_NAMES );
+
     # Feminine firstnames ends to vowels
     return $FEMININE if $firstname =~ /[ая]$/;
+    # Masculine firstbanes ends to consonants
+    return $MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
 
     # Detect by lastname
     # possessive names
