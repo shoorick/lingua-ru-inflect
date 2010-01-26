@@ -1,4 +1,4 @@
-#!perl -T
+#-!perl -T
 
 use utf8;
 use Test::More 'no_plan';
@@ -12,41 +12,48 @@ my $F = $Lingua::RU::Inflect::FEMININE;
 my $d = \&Lingua::RU::Inflect::detect_gender;
 
 # Masculine names
-ok( &$d( 'Иванов', 'Сергей', 'Михайлович' ) == $M,
+ok( $M == &$d( 'Иванов', 'Сергей', 'Михайлович' ),
     'usual russian masculine name: Sergey Mikhailovich Ivanov' );
-ok( &$d( 'Ильин', 'Роман' ) == $M,
+ok( $M == &$d( 'Ильин', 'Роман' ),
     'usual russian masculine name without patronym: Roman Ilyin' );
-ok( &$d( 'Репка', 'Илья' ) == $M,
+ok( $M == &$d( undef, undef, 'Михалыч' ),
+    'vulgar form of russian patronym: Mikhalych' );
+ok( $M == &$d( 'Пушкин', undef, 'Сергеич' ),
+    'lastname with vulgar form of patronym: Pushkin Sergeich' );
+ok( $M == &$d( 'Репка', 'Илья' ),
     'russian masculine name ends to vowels without patronym: Ilya Repka' );
-ok( &$d( 'Ушко', 'Микола' ) == $M,
+ok( $M == &$d( 'Ушко', 'Микола' ),
     'ukrainian masculine name ends to vowels without patronym: Mykola Ushko' );
-ok( &$d( 'Косой', 'Вася' ) == $M,
+ok( $M == &$d( 'Косой', 'Вася' ),
     'name of boy ends to vowels without patronym: Vasya Kosoy' );
-ok( &$d( 'Балаганов', 'Шура' ) == $M,
+ok( $M == &$d( 'Балаганов', 'Шура' ),
     'ambiguous name, detect by lastname: Shura Balaganov' );
-ok( &$d( 'Уолл', 'Ларри' ) == $M,
+ok( $M == &$d( 'Уолл', 'Ларри' ),
     'english masculine name: Larry Wall' );
-ok( &$d( 'Бах', 'Иоганн Себастьян' ) == $M,
+ok( $M == &$d( 'Бах', 'Иоганн Себастьян' ),
     'german masculine name: Johann Sebastian Bach' );
-ok( &$d( 'фон Вебер', 'Карл Мария' ) == $M,
+ok( $M == &$d( 'фон Вебер', 'Карл Мария' ),
     'german masculine name: Carl Maria von Weber' );
 
 # Feminine names
-ok( &$d( 'Волкова', 'Анна', 'Павловна' ) == $F,
+ok( $F == &$d( 'Волкова', 'Анна', 'Павловна' ),
     'usual russian feminine name: Anna Pavlovna Volkova' );
-ok( &$d( 'Соколова', 'Инна' ) == $F,
+ok( $F == &$d( 'Соколова', 'Инна' ),
     'russian feminine name without patronym: Inna Sokolova' );
-ok( &$d( 'Шевчук', 'Любовь' ) == $F,
+ok( $F == &$d( undef, 'Маргарита', 'Пална' ),
+    'vulgar form of russian feminine firstname with patronym: Margarita Palna' );
+ok( $F == &$d( 'Шевчук', 'Любовь' ),
     'russian feminine name ends to consonants: Lyubov Shevchuk' );
-ok( &$d( 'Купер', 'Элис' ) == $F,
-    'foreign feminine name ends to consonants: Alice Cooper' );
-ok( &$d( 'Петрова', 'Женя' ) == $F,
+ok( $F == &$d( 'Купер', 'Элис' ),
+    'english feminine name ends to consonants: Alice Cooper' );
+ok( $F == &$d( 'Петрова', 'Женя' ),
     'ambiguous name, detect by lastname: Zhenya Petrova' );
-
-# Wrong names
-ok( !defined( &$d( 'Хренова', 'Гадя', 'Петрович' ) ),
-    'wrong name: Gadya Petrovich Khrenova' );
 
 # Ambigous names
 ok( !defined( &$d( 'Кац', 'Саша' ) ),
     'ambiguous name: Sasha Katz' );
+
+# Wrong names
+# Just for fun
+# ok( !defined( &$d( 'Хренова', 'Гадя', 'Петрович' ) ),
+#     'wrong name: Gadya Petrovich Khrenova' );
