@@ -39,6 +39,8 @@ BEGIN {
 
 use List::MoreUtils 'mesh';
 
+use Lingua::RU::Inflect::Exceptions;
+
 # Gender
 our ( $FEMININE, $MASCULINE ) = ( 0, 1 );
 
@@ -93,27 +95,27 @@ sub detect_gender {
 
     # Detect by patronym
     return $FEMININE if $surname =~ /на$/;
-    return   $MASCULINE if $surname =~ /[иы]ч$/;
+    return $MASCULINE if $surname =~ /[иы]ч$/;
 
     # Detect by firstname
     # Process exceptions
-    foreach my $name ( @Exceptions::MASCULINE_NAMES ) {
+    foreach my $name ( @Lingua::RU::Inflect::Exceptions::MASCULINE_NAMES ) {
         return $MASCULINE if $firstname eq $name;
     }
 
-    foreach my $name ( @Exceptions::FEMININE_NAMES ) {
+    foreach my $name ( @Lingua::RU::Inflect::Exceptions::FEMININE_NAMES ) {
         return $FEMININE if $firstname eq $name;
     }
     # Feminine firstnames ends to vowels
-    return $FEMININE if $firstname =~ /[аеёиоуыэюя]$/;
+    return $FEMININE if $firstname =~ /[ая]$/;
 
     # Detect by lastname
     # possessive names
     return $FEMININE if $lastname =~ /(ин|ын|ёв|ов)а$/;
-    return   $MASCULINE if $lastname =~ /(ин|ын|ёв|ов)$/;
+    return $MASCULINE if $lastname =~ /(ин|ын|ёв|ов)$/;
     # adjectives
     return $FEMININE if $lastname =~ /(ая|яя)$/;
-    return   $MASCULINE if $lastname =~ /(ий|ый)$/;
+    return $MASCULINE if $lastname =~ /(ий|ый)$/;
 
 }
 
