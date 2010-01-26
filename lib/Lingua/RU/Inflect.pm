@@ -92,6 +92,7 @@ Most of russian masculine firstnames ends to consonants.
 sub detect_gender {
     my ( $lastname, $firstname, $surname ) = @_;
     map { $_ ||= '' } ( $lastname, $firstname, $surname );
+    my $ambiguous = 0;
 
     # Detect by patronym
     return $FEMININE if $surname =~ /на$/;
@@ -110,10 +111,16 @@ sub detect_gender {
         return $FEMININE if $firstname eq $_;
     } ( @Lingua::RU::Inflect::Exceptions::FEMININE_NAMES );
 
-    # Feminine firstnames ends to vowels
-    return $FEMININE if $firstname =~ /[ая]$/;
-    # Masculine firstbanes ends to consonants
-    return $MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
+    map {
+        $ambiguous++ && last if $firstname eq $_;
+    } ( @Lingua::RU::Inflect::Exceptions::AMBIGUOUS_NAMES );
+
+    unless ( $ambiguous ) {
+        # Feminine firstnames ends to vowels
+        return $FEMININE if $firstname =~ /[ая]$/;
+        # Masculine firstbanes ends to consonants
+        return $MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
+    } # unless
 
     # Detect by lastname
     # possessive names
@@ -123,6 +130,8 @@ sub detect_gender {
     return $FEMININE if $lastname =~ /(ая|яя)$/;
     return $MASCULINE if $lastname =~ /(ий|ый)$/;
 
+    # Unknown or ambiguous name
+    return undef;
 }
 
 =head2 _inflect_name
