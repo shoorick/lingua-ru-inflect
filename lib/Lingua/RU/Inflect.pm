@@ -25,7 +25,7 @@ BEGIN {
     $VERSION     = 0.01;
 
     @ISA         = qw(Exporter);
-    @EXPORT      = qw(&decline);
+    @EXPORT      = qw(&inflect_name);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
     # your exported package globals go here,
@@ -40,7 +40,7 @@ BEGIN {
 use List::MoreUtils 'mesh';
 
 # Gender
-our ( $FEMALE, $MALE ) = ( 0, 1 );
+our ( $FEMININE, $MASCULINE ) = ( 0, 1 );
 
 # Падежи
 my  @CASE_NAMES = qw(
@@ -79,7 +79,7 @@ if you don't export anything, such as for a purely object-oriented module.
 Try to detect gender by name. Up to three arguments expected:
 lastname, firstname, patronym.
 
-Return C<$MALE>, C<$FEMALE> for successful detection
+Return C<$MASCULINE>, C<$FEMININE> for successful detection
 or C<undef> when function can't detect gender.
 
 Most of russian feminine firstnames ends to vowels “a” and “ya”.
@@ -92,28 +92,28 @@ sub detect_gender {
     map { $_ ||= '' } ( $lastname, $firstname, $surname );
 
     # Detect by patronym
-    return $FEMALE if $surname =~ /на$/;
-    return   $MALE if $surname =~ /[иы]ч$/;
+    return $FEMININE if $surname =~ /на$/;
+    return   $MASCULINE if $surname =~ /[иы]ч$/;
 
     # Detect by firstname
     # Process exceptions
     foreach my $name ( @Exceptions::MASCULINE_NAMES ) {
-        return $MALE if $firstname eq $name;
+        return $MASCULINE if $firstname eq $name;
     }
 
     foreach my $name ( @Exceptions::FEMININE_NAMES ) {
-        return $FEMALE if $firstname eq $name;
+        return $FEMININE if $firstname eq $name;
     }
     # Feminine firstnames ends to vowels
-    return $FEMALE if $firstname =~ /[аеёиоуыэюя]$/;
+    return $FEMININE if $firstname =~ /[аеёиоуыэюя]$/;
 
     # Detect by lastname
     # possessive names
-    return $FEMALE if $lastname =~ /(ин|ын|ёв|ов)а$/;
-    return   $MALE if $lastname =~ /(ин|ын|ёв|ов)$/;
+    return $FEMININE if $lastname =~ /(ин|ын|ёв|ов)а$/;
+    return   $MASCULINE if $lastname =~ /(ин|ын|ёв|ов)$/;
     # adjectives
-    return $FEMALE if $lastname =~ /(ая|яя)$/;
-    return   $MALE if $lastname =~ /(ий|ый)$/;
+    return $FEMININE if $lastname =~ /(ая|яя)$/;
+    return   $MASCULINE if $lastname =~ /(ий|ый)$/;
 
 }
 
@@ -162,10 +162,10 @@ sub _inflect_name {
         last if $firstname =~ s/й$/qw(я ю я ем е)[$case]/e;
 
         # Same endings, but different gender
-        if ( $gender == $MALE ) {
+        if ( $gender == $MASCULINE ) {
             last if $firstname =~ s/ь$/qw(я ю я ем е)[$case]/e;
         }
-        elsif ( $gender == $FEMALE ) {
+        elsif ( $gender == $FEMININE ) {
             last if $firstname =~ s/ь$/qw(и и ь ью и)[$case]/e;
         }
 
@@ -201,7 +201,7 @@ sub _inflect_name {
         last if $lastname =~ s/ой$/qw(ого ому ого ым ом)[$case]/e;
 
         # Rest of masculine lastnames
-        if ( $gender == $MALE ) {
+        if ( $gender == $MASCULINE ) {
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
             last if $lastname =~ s/я$/qw(и е ю ёй е)[$case]/e;
             last if $lastname =~ s/й$/qw(я ю й ем е)[$case]/e;
