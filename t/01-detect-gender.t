@@ -34,6 +34,8 @@ ok( $M == &$d( 'Бах', 'Иоганн Себастьян' ),
     'german masculine name: Johann Sebastian Bach' );
 ok( $M == &$d( 'фон Вебер', 'Карл Мария' ),
     'german masculine name: Carl Maria von Weber' );
+ok( $M == &$d( 'Руссо', 'Жан-Жак' ),
+    'masculine name with hyphen: Jean-Jacques Rousseau' );
 
 # Feminine names
 ok( $F == &$d( 'Волкова', 'Анна', 'Павловна' ),
@@ -48,6 +50,8 @@ ok( $F == &$d( 'Купер', 'Элис' ),
     'english feminine name ends to consonants: Alice Cooper' );
 ok( $F == &$d( 'Петрова', 'Женя' ),
     'ambiguous name, detect by lastname: Zhenya Petrova' );
+ok( $F == &$d( 'Фишер', 'Анна-Мария' ),
+    'feminine name with hyphen: Anna-Maria Fisher' );
 
 # Ambigous names
 ok( !defined( &$d( 'Кац', 'Саша' ) ),
