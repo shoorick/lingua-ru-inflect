@@ -25,35 +25,51 @@ BEGIN {
     $VERSION     = 0.01;
 
     @ISA         = qw(Exporter);
-    @EXPORT      = qw(&inflect_given_name &detect_gender_by_given_name);
-    %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-    # your exported package globals go here,
-    # as well as any optionally exported functions
-    @EXPORT_OK   = qw(
-        $NOMINATIVE $GENITIVE     $DATIVE
-        $ACCUSATIVE $INSTRUMENTAL $PREPOSITIONAL
-        %CASES
-        $MASCULINE $FEMININE
+    @EXPORT      = qw(
+        inflect_given_name detect_gender_by_given_name
     );
+
+    # exported package globals
+    @EXPORT_OK   = qw(
+        NOMINATIVE GENITIVE     DATIVE
+        ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
+        %CASES
+        MASCULINE FEMININE
+    );
+
+    %EXPORT_TAGS = (
+        'subs'    => [ qw( inflect_given_name detect_gender_by_given_name ) ],
+        'genders' => [ qw( MASCULINE  FEMININE ) ],
+        'cases'   => [ qw( NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL %CASES ) ],
+        'all'     => [ @EXPORT, @EXPORT_OK ],
+    )
+
 }
 
-use List::MoreUtils 'mesh';
+# Cases
+# Why I can't use loop?!
+use constant {
+    NOMINATIVE    => -1,
+    GENITIVE      => 0,
+    DATIVE        => 1,
+    ACCUSATIVE    => 2,
+    INSTRUMENTAL  => 3,
+    PREPOSITIONAL => 4,
+};
 
-# Gender
-our ( $FEMININE, $MASCULINE ) = ( 0, 1 );
-
-# Падежи
 my  @CASE_NAMES = qw(
     NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
 );
 my  @CASE_NUMBERS = ( -1 .. 4 );
 
-our (
-    $NOMINATIVE, $GENITIVE, $DATIVE, $ACCUSATIVE, $INSTRUMENTAL, $PREPOSITIONAL
-) = @CASE_NUMBERS;
-
+use List::MoreUtils 'mesh';
 our %CASES = mesh @CASE_NAMES, @CASE_NUMBERS;
+
+# Gender
+use constant {
+    FEMININE  => 0,
+    MASCULINE => 1,
+};
 
 =head1 SYNOPSIS
 
@@ -66,9 +82,9 @@ Perhaps a little code snippet.
     my @name = qw/Петрова Любовь Степановна/;
 
     my $gender = detect_gender_by_given_name(@name);
-    # $gender == $FEMININE
+    # $gender == FEMININE
 
-    my @genitive = inflect_given_name($GENITIVE, @name);
+    my @genitive = inflect_given_name(GENITIVE, @name);
     # $genitive == qw/Петровой Любови Степановны/;
 
 =head1 ABSTRACT
@@ -81,7 +97,21 @@ Inflect any nouns, any words, anything...
 
 =head1 EXPORT
 
-A list of functions that can be exported.
+Function C<detect_gender_by_given_name> and
+C<detect_gender_by_given_name> are exported by default.
+
+Also you can export only case names:
+
+    use Lingua::RU::Inflect qw/:cases/;
+
+Or only subs and genders
+
+    use Lingua::RU::Inflect qw/:subs :genders/;
+
+Or everything: subs, genders and case names:
+
+    use Lingua::RU::Inflect qw/:all/; # ors
+    use Lingua::RU::Inflect qw/:cases :genders :subs/;
 
 =head1 FUNCTIONS
 
@@ -90,7 +120,7 @@ A list of functions that can be exported.
 Try to detect gender by name. Up to three arguments expected:
 lastname, firstname, patronym.
 
-Return C<$MASCULINE>, C<$FEMININE> for successful detection
+Return C<MASCULINE>, C<FEMININE> for successful detection
 or C<undef> when function can't detect gender.
 
 =head3 Detection rules
@@ -110,7 +140,15 @@ with “ich” and  “ych”.
 Most of russian feminine firstnames ends to vowels “a” and “ya”.
 Most of russian masculine firstnames ends to consonants.
 
-There's exists exceptions for both rules: feminine names such as russian name Lubov' (Любовь) and foreign names Ruf' (Руфь), Rachil' (Рахиль) etc. Masculine names also often have affectionate diminutive forms: Alyosha (Алёша) for Alexey (Алексей), Kolya (Коля) for Nickolay (Николай) etc. Some affectionate diminutive names are ambiguous: Sasha (Саша) is diminutive name for feminine name Alexandra (Александра) and for masculine name Alexander (Александр), Zhenya (Женя) is diminutive name for feminine name Eugenia (Евгения) and for masculine name Eugene (Евгений) etc.
+There's exists exceptions for both rules: feminine names such as russian
+name Lubov' (Любовь) and foreign names Ruf' (Руфь), Rachil' (Рахиль)
+etc. Masculine names also often have affectionate diminutive forms:
+Alyosha (Алёша) for Alexey (Алексей), Kolya (Коля) for Nickolay
+(Николай) etc. Some affectionate diminutive names are ambiguous: Sasha
+(Саша) is diminutive name for feminine name Alexandra (Александра) and
+for masculine name Alexander (Александр), Zhenya (Женя) is diminutive
+name for feminine name Eugenia (Евгения) and for masculine name Eugene
+(Евгений) etc.
 
 These exceptions are processed.
 
@@ -118,8 +156,10 @@ When got ambiguous result, function try to use next rule.
 
 =item 3
 
-Most of russian lastnames derived from possessive nouns (and names). Feminine forms of these lastnames ends to “a”.
-Some lastnames derived from adjectives. Feminine forms of these lastnames ends to “ya”.
+Most of russian lastnames derived from possessive nouns (and names).
+Feminine forms of these lastnames ends to “a”.
+Some lastnames derived from adjectives. Feminine forms of these
+lastnames ends to “ya”.
 
 =back
 
@@ -131,8 +171,8 @@ sub detect_gender_by_given_name {
     my $ambiguous = 0;
 
     # Detect by patronym
-    return $FEMININE if $patronym =~ /на$/;
-    return $MASCULINE if $patronym =~ /[иы]ч$/;
+    return FEMININE if $patronym =~ /на$/;
+    return MASCULINE if $patronym =~ /[иы]ч$/;
 
     # Detect by firstname
     # Drop all names except first
@@ -140,11 +180,11 @@ sub detect_gender_by_given_name {
 
     # Process exceptions
     map {
-        return $MASCULINE if $firstname eq $_;
+        return MASCULINE if $firstname eq $_;
     } ( &_MASCULINE_NAMES );
 
     map {
-        return $FEMININE if $firstname eq $_;
+        return FEMININE if $firstname eq $_;
     } ( &_FEMININE_NAMES );
 
     map {
@@ -153,18 +193,18 @@ sub detect_gender_by_given_name {
 
     unless ( $ambiguous ) {
         # Feminine firstnames ends to vowels
-        return $FEMININE if $firstname =~ /[ая]$/;
+        return FEMININE if $firstname =~ /[ая]$/;
         # Masculine firstnames ends to consonants
-        return $MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
+        return MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
     } # unless
 
     # Detect by lastname
     # possessive names
-    return $FEMININE if $lastname =~ /(ев|ин|ын|ёв|ов)а$/;
-    return $MASCULINE if $lastname =~ /(ев|ин|ын|ёв|ов)$/;
+    return FEMININE if $lastname =~ /(ев|ин|ын|ёв|ов)а$/;
+    return MASCULINE if $lastname =~ /(ев|ин|ын|ёв|ов)$/;
     # adjectives
-    return $FEMININE if $lastname =~ /(ая|яя)$/;
-    return $MASCULINE if $lastname =~ /(ий|ый)$/;
+    return FEMININE if $lastname =~ /(ая|яя)$/;
+    return MASCULINE if $lastname =~ /(ий|ый)$/;
 
     # Unknown or ambiguous name
     return undef;
@@ -185,8 +225,8 @@ sub _inflect_given_name {
     my $case   = shift;
 
     return
-        if $case < $GENITIVE
-        || $case > $PREPOSITIONAL;
+        if $case < GENITIVE
+        || $case > PREPOSITIONAL;
 
     my ( $lastname, $firstname, $patronym ) = @_;
     map { $_ ||= '' } ( $lastname, $firstname, $patronym );
@@ -215,10 +255,10 @@ sub _inflect_given_name {
         last if $firstname =~ s/й$/qw(я ю я ем е)[$case]/e;
 
         # Same endings, but different gender
-        if ( $gender == $MASCULINE ) {
+        if ( $gender == MASCULINE ) {
             last if $firstname =~ s/ь$/qw(я ю я ем е)[$case]/e;
         }
-        elsif ( $gender == $FEMININE ) {
+        elsif ( $gender == FEMININE ) {
             last if $firstname =~ s/ь$/qw(и и ь ью и)[$case]/e;
         }
 
@@ -254,7 +294,7 @@ sub _inflect_given_name {
         last if $lastname =~ s/ой$/qw(ого ому ого ым ом)[$case]/e;
 
         # Rest of masculine lastnames
-        if ( $gender == $MASCULINE ) {
+        if ( $gender == MASCULINE ) {
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
             last if $lastname =~ s/я$/qw(и е ю ёй е)[$case]/e;
             last if $lastname =~ s/й$/qw(я ю й ем е)[$case]/e;
