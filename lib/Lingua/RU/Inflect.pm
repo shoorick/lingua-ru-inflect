@@ -25,7 +25,7 @@ BEGIN {
     $VERSION     = 0.01;
 
     @ISA         = qw(Exporter);
-    @EXPORT      = qw(&inflect_name);
+    @EXPORT      = qw(&inflect_given_name);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
     # your exported package globals go here,
@@ -60,14 +60,27 @@ our %CASES = mesh @CASE_NAMES, @CASE_NUMBERS;
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
+Inflect russian names which represented in UTF-8.
 
 Perhaps a little code snippet.
 
     use Lingua::RU::Inflect;
 
-    my $foo = Lingua::RU::Inflect->new();
-    ...
+    my @name = qw/Петрова Любовь Степановна/;
+
+    my $gender = detect_gender_by_given_name(@name);
+    # $gender == $FEMININE
+
+    my @genitive = inflect_given_name($GENITIVE, @name);
+    # $genitive == qw/Петровой Любови Степановны/;
+
+=head1 ABSTRACT
+
+Inflect russian given names. Detect gender by given name.
+
+=head1 TO DO
+
+Inflect any nouns, any words, anything...
 
 =head1 EXPORT
 
@@ -76,7 +89,7 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-=head2 detect_gender
+=head2 detect_gender_by_given_name
 
 Try to detect gender by name. Up to three arguments expected:
 lastname, firstname, patronym.
@@ -89,7 +102,7 @@ Most of russian masculine firstnames ends to consonants.
 
 =cut
 
-sub detect_gender {
+sub detect_gender_by_given_name {
     my ( $lastname, $firstname, $surname ) = @_;
     map { $_ ||= '' } ( $lastname, $firstname, $surname );
     my $ambiguous = 0;
@@ -134,7 +147,7 @@ sub detect_gender {
     return undef;
 }
 
-=head2 _inflect_name
+=head2 _inflect_given_name
 
 Inflect name of given gender to given case.
 Up to 5 arguments expected: gender, case, lastname, firstname, patronym.
@@ -144,7 +157,7 @@ Return list contains inflected lastname, firstname, patronym.
 
 =cut
 
-sub _inflect_name {
+sub _inflect_given_name {
     my $gender = shift;
     my $case   = shift;
 
@@ -228,21 +241,27 @@ sub _inflect_name {
     } # Lastnames
 
     return ( $lastname, $firstname, $surname );
-} # sub _inflect_name
+} # sub _inflect_given_name
 
 
-=head2 inflect_name
+=head2 inflect_given_name
 
 Определяет пол и склоняет имя.
 Входные параметры — падеж, фамилия, имя, отчество.
 Возвращает список — фамилию, имя, отчество.
 
+Detect gender by given name and inflect this name.
+
+Expect for up to 4 arguments: I<case>, I<lastname>, I<firstname>, I<patronym>
+
+Return list which contains inflected I<lastname>, I<firstname>, I<patronym>
+
 =cut
 
-sub inflect_name {
+sub inflect_given_name {
     my $case = shift;
-    my @name = _inflect_name( detect_gender( @_ ), $case, @_ );
-} # sub inflect_name
+    my @name = _inflect_given_name( detect_gender_by_given_name( @_ ), $case, @_ );
+} # sub inflect_given_name
 
 =head1 SEE ALSO
 
@@ -258,15 +277,11 @@ Please report any bugs or feature requests to C<bug-lingua-ru-inflect at rt.cpan
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc Lingua::RU::Inflect
-
 
 You can also look for information at:
 
@@ -293,17 +308,15 @@ L<http://search.cpan.org/dist/Lingua-RU-Inflect/>
 
 =head1 ACKNOWLEDGEMENTS
 
-
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010 Alexander Sapozhnikov.
+Copyright 2009-2010 Alexander Sapozhnikov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
-
 
 =cut
 

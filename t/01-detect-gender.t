@@ -3,13 +3,11 @@
 use utf8;
 use Test::More 'no_plan';
 
-BEGIN {
-    use_ok('Lingua::RU::Inflect');
-}
+use Lingua::RU::Inflect;
 
 my $M = $Lingua::RU::Inflect::MASCULINE;
 my $F = $Lingua::RU::Inflect::FEMININE;
-my $d = \&Lingua::RU::Inflect::detect_gender;
+my $d = \&Lingua::RU::Inflect::detect_gender_by_given_name;
 
 # Masculine names
 ok( $M == &$d( 'Иванов', 'Сергей', 'Михайлович' ),
@@ -43,7 +41,7 @@ ok( $F == &$d( 'Волкова', 'Анна', 'Павловна' ),
 ok( $F == &$d( 'Соколова', 'Инна' ),
     'russian feminine name without patronym: Inna Sokolova' );
 ok( $F == &$d( undef, 'Маргарита', 'Пална' ),
-    'vulgar form of russian feminine firstname with patronym: Margarita Palna' );
+    'russian feminine firstname with vulgar form of patronym: Margarita Palna' );
 ok( $F == &$d( 'Шевчук', 'Любовь' ),
     'russian feminine name ends to consonants: Lyubov Shevchuk' );
 ok( $F == &$d( 'Купер', 'Элис' ),
