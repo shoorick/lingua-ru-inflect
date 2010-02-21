@@ -1,12 +1,12 @@
-#-!perl -T
+#!perl -T
 
 use utf8;
 use Test::More 'no_plan';
 
 use Lingua::RU::Inflect;
 
-my $M = $Lingua::RU::Inflect::MASCULINE;
-my $F = $Lingua::RU::Inflect::FEMININE;
+my $M = Lingua::RU::Inflect::MASCULINE;
+my $F = Lingua::RU::Inflect::FEMININE;
 my $d = \&Lingua::RU::Inflect::detect_gender_by_given_name;
 
 # Masculine names
