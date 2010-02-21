@@ -25,7 +25,7 @@ BEGIN {
     $VERSION     = 0.01;
 
     @ISA         = qw(Exporter);
-    @EXPORT      = qw(&inflect_given_name);
+    @EXPORT      = qw(&inflect_given_name &detect_gender_by_given_name);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
     # your exported package globals go here,
@@ -34,12 +34,11 @@ BEGIN {
         $NOMINATIVE $GENITIVE     $DATIVE
         $ACCUSATIVE $INSTRUMENTAL $PREPOSITIONAL
         %CASES
+        $MASCULINE $FEMININE
     );
 }
 
 use List::MoreUtils 'mesh';
-
-use Lingua::RU::Inflect::Exceptions;
 
 # Gender
 our ( $FEMININE, $MASCULINE ) = ( 0, 1 );
@@ -55,8 +54,6 @@ our (
 ) = @CASE_NUMBERS;
 
 our %CASES = mesh @CASE_NAMES, @CASE_NUMBERS;
-
-
 
 =head1 SYNOPSIS
 
@@ -84,8 +81,7 @@ Inflect any nouns, any words, anything...
 
 =head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+A list of functions that can be exported.
 
 =head1 FUNCTIONS
 
@@ -97,19 +93,46 @@ lastname, firstname, patronym.
 Return C<$MASCULINE>, C<$FEMININE> for successful detection
 or C<undef> when function can't detect gender.
 
+=head3 Detection rules
+
+When name match some rule, rest of rules are ignored.
+
+=over 4
+
+=item 1
+
+Patronym (russian отчество — otchestvo), if presented, gives unambiguous
+detection rules: feminine patronyms ends with “na”, masculine ones ends
+with “ich” and  “ych”.
+
+=item 2
+
 Most of russian feminine firstnames ends to vowels “a” and “ya”.
 Most of russian masculine firstnames ends to consonants.
+
+There's exists exceptions for both rules: feminine names such as russian name Lubov' (Любовь) and foreign names Ruf' (Руфь), Rachil' (Рахиль) etc. Masculine names also often have affectionate diminutive forms: Alyosha (Алёша) for Alexey (Алексей), Kolya (Коля) for Nickolay (Николай) etc. Some affectionate diminutive names are ambiguous: Sasha (Саша) is diminutive name for feminine name Alexandra (Александра) and for masculine name Alexander (Александр), Zhenya (Женя) is diminutive name for feminine name Eugenia (Евгения) and for masculine name Eugene (Евгений) etc.
+
+These exceptions are processed.
+
+When got ambiguous result, function try to use next rule.
+
+=item 3
+
+Most of russian lastnames derived from possessive nouns (and names). Feminine forms of these lastnames ends to “a”.
+Some lastnames derived from adjectives. Feminine forms of these lastnames ends to “ya”.
+
+=back
 
 =cut
 
 sub detect_gender_by_given_name {
-    my ( $lastname, $firstname, $surname ) = @_;
-    map { $_ ||= '' } ( $lastname, $firstname, $surname );
+    my ( $lastname, $firstname, $patronym ) = @_;
+    map { $_ ||= '' } ( $lastname, $firstname, $patronym );
     my $ambiguous = 0;
 
     # Detect by patronym
-    return $FEMININE if $surname =~ /на$/;
-    return $MASCULINE if $surname =~ /[иы]ч$/;
+    return $FEMININE if $patronym =~ /на$/;
+    return $MASCULINE if $patronym =~ /[иы]ч$/;
 
     # Detect by firstname
     # Drop all names except first
@@ -118,27 +141,27 @@ sub detect_gender_by_given_name {
     # Process exceptions
     map {
         return $MASCULINE if $firstname eq $_;
-    } ( @Lingua::RU::Inflect::Exceptions::MASCULINE_NAMES );
+    } ( &_MASCULINE_NAMES );
 
     map {
         return $FEMININE if $firstname eq $_;
-    } ( @Lingua::RU::Inflect::Exceptions::FEMININE_NAMES );
+    } ( &_FEMININE_NAMES );
 
     map {
         $ambiguous++ && last if $firstname eq $_;
-    } ( @Lingua::RU::Inflect::Exceptions::AMBIGUOUS_NAMES );
+    } ( &_AMBIGUOUS_NAMES );
 
     unless ( $ambiguous ) {
         # Feminine firstnames ends to vowels
         return $FEMININE if $firstname =~ /[ая]$/;
-        # Masculine firstbanes ends to consonants
+        # Masculine firstnames ends to consonants
         return $MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
     } # unless
 
     # Detect by lastname
     # possessive names
-    return $FEMININE if $lastname =~ /(ин|ын|ёв|ов)а$/;
-    return $MASCULINE if $lastname =~ /(ин|ын|ёв|ов)$/;
+    return $FEMININE if $lastname =~ /(ев|ин|ын|ёв|ов)а$/;
+    return $MASCULINE if $lastname =~ /(ев|ин|ын|ёв|ов)$/;
     # adjectives
     return $FEMININE if $lastname =~ /(ая|яя)$/;
     return $MASCULINE if $lastname =~ /(ий|ый)$/;
@@ -165,13 +188,13 @@ sub _inflect_given_name {
         if $case < $GENITIVE
         || $case > $PREPOSITIONAL;
 
-    my ( $lastname, $firstname, $surname ) = @_;
-    map { $_ ||= '' } ( $lastname, $firstname, $surname );
+    my ( $lastname, $firstname, $patronym ) = @_;
+    map { $_ ||= '' } ( $lastname, $firstname, $patronym );
 
     # Patronyms
-    $surname =~ s/на$/qw(ны не ну ной не)[$case]/e;
-    $surname =~ s/ич$/qw(ича ичу ича ичем иче)[$case]/e;
-    $surname =~ s/ыч$/qw(ыча ычу ыча ычем ыче)[$case]/e;
+    $patronym =~ s/на$/qw(ны не ну ной не)[$case]/e;
+    $patronym =~ s/ич$/qw(ича ичу ича ичем иче)[$case]/e;
+    $patronym =~ s/ыч$/qw(ыча ычу ыча ычем ыче)[$case]/e;
 
     # Firstnames
     {
@@ -240,7 +263,7 @@ sub _inflect_given_name {
         } # if
     } # Lastnames
 
-    return ( $lastname, $firstname, $surname );
+    return ( $lastname, $firstname, $patronym );
 } # sub _inflect_given_name
 
 
@@ -262,6 +285,48 @@ sub inflect_given_name {
     my $case = shift;
     my @name = _inflect_given_name( detect_gender_by_given_name( @_ ), $case, @_ );
 } # sub inflect_given_name
+
+# Exceptions:
+
+# Masculine names which ends to vowels “a” and “ya”
+sub _MASCULINE_NAMES {
+    return qw(
+        Аба Азарья Акива Аккужа Аникита Алёша Андрюха Андрюша Аса Байгужа
+        Вафа Ваня Вася Витя Вова Володя Габдулла Габидулла Гаврила Гадельша
+        Гайнулла Гайса Гайфулла Галиулла Гарри Гата Гдалья Гийора Гиля Гошеа
+        Данила Джиханша Дима Зайнулла Закария Зия Зосима Зхарья Зыя Идельгужа
+        Иешуа Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
+        Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша
+        Муртаза Муса Мусса Мустафа Никита Нэта Нэхэмья Овадья Петя Птахья
+        Рахматулла Риза Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия Толя
+        Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра Элиша
+        Элькана Юмагужа Ярулла Яхья Яша
+    )
+}
+
+# Feminine names which ends to consonants
+sub _FEMININE_NAMES {
+    return qw(
+        Айгуль Айгюль Айзиряк Айрис Альфинур Асылгюль Бадар Бадиян Банат Бедер
+        Бибикамал Бибинур Гайниджамал Гайникамал Гаухар Гиффат Гулендем
+        Гульбадиян Гульдар Гульджамал Гульджихан Гульехан Гульзар Гулькей
+        Гульназ Гульнар Гульнур Гульсем Гульсесек Гульсибар Гульчачак Гульшат
+        Гульшаян Гульюзум Гульямал Гюзель Джамал Джаухар Джихан Дильбар Диляфруз
+        Зайнаб Зайнап Зейнаб Зубарджат Зуберьят Ильсёяр Камяр Карасес Кейт
+        Кэролайн Кэт Кэтрин Кямар Любовь Ляйсан Магинур Магруй Марьям Минджихан
+        Минлегюль Миньеган Наркас Нинель Нурджиган Райхан Раушан Рахель Рахиль
+        Рут Руфь Рэйчел Сагадат Сагдат Сарбиназ Сарвар Сафин Сахибджамал Сулпан
+        Сумбуль Сурур Сюмбель Сясак Тамар Тансулпан Умегульсум Уммегюльсем
+        Фарваз Фархинур Фирдаус Хаджар Хажар Хаят Хуршид Чечек Чулпан Шамсинур
+        Элис Энн Юдифь Юндуз Ямал
+    )
+}
+
+sub _AMBIGUOUS_NAMES {
+    return qw(
+        Женя Мина Паша Саша Шура
+    )
+}
 
 =head1 SEE ALSO
 
