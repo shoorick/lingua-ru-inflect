@@ -110,7 +110,7 @@ Or only subs and genders
 
 Or everything: subs, genders and case names:
 
-    use Lingua::RU::Inflect qw/:all/; # ors
+    use Lingua::RU::Inflect qw/:all/; # or
     use Lingua::RU::Inflect qw/:cases :genders :subs/;
 
 =head1 FUNCTIONS
@@ -232,12 +232,19 @@ sub _inflect_given_name {
     map { $_ ||= '' } ( $lastname, $firstname, $patronym );
 
     # Patronyms
-    $patronym =~ s/на$/qw(ны не ну ной не)[$case]/e;
-    $patronym =~ s/ич$/qw(ича ичу ича ичем иче)[$case]/e;
-    $patronym =~ s/ыч$/qw(ыча ычу ыча ычем ыче)[$case]/e;
+    {
+        last unless $patronym;
+
+        last if $patronym =~ s/на$/qw(ны не ну ной не)[$case]/e;
+        last if $patronym =~ s/ыч$/qw(ыча ычу ыча ычем ыче)[$case]/e;
+        $patronym =~ s/ич$/qw(ича ичу ича ичем иче)[$case]/e;
+        $patronym =~ s/(Иль|Кузьм|Фом)ичем$/$1ичом/;
+    }
 
     # Firstnames
     {
+        last unless $firstname;
+
         # Exceptions
         $firstname =~ s/^Пётр$/Петр/;
 
@@ -248,6 +255,7 @@ sub _inflect_given_name {
         last if $firstname =~ /[еёиоуыэю]$/i;
         last if $firstname =~ /[аеёиоуыэюя]а$/i;
         last if $firstname =~ /[аёоуыэюя]я$/i;
+        last if $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i && $gender != MASCULINE;
 
         last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
@@ -268,6 +276,9 @@ sub _inflect_given_name {
 
     # Lastnames
     {
+        last unless $lastname;
+        last unless defined $gender;
+
         # Indeclinable
         last if $lastname =~ /[еёиоуыэю]$/i;
         last if $lastname =~ /[аеёиоуыэюя]а$/i;
@@ -298,7 +309,7 @@ sub _inflect_given_name {
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
             last if $lastname =~ s/я$/qw(и е ю ёй е)[$case]/e;
             last if $lastname =~ s/й$/qw(я ю й ем е)[$case]/e;
-            last if $firstname =~ s/ь$/qw(я ю я ем е)[$case]/e;
+            last if $lastname =~ s/ь$/qw(я ю я ем е)[$case]/e;
             $lastname .= qw(а у а ом е)[$case];
         } # if
     } # Lastnames
@@ -339,7 +350,7 @@ sub _MASCULINE_NAMES {
         Иешуа Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
         Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша
         Муртаза Муса Мусса Мустафа Никита Нэта Нэхэмья Овадья Петя Птахья
-        Рахматулла Риза Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия Толя
+        Рахматулла Риза Рома Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия Толя
         Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра Элиша
         Элькана Юмагужа Ярулла Яхья Яша
     )
