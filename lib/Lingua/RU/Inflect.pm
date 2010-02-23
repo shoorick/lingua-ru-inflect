@@ -87,10 +87,6 @@ Perhaps a little code snippet.
     my @genitive = inflect_given_name(GENITIVE, @name);
     # $genitive == qw/Петровой Любови Степановны/;
 
-=head1 ABSTRACT
-
-Inflect russian given names. Detect gender by given name.
-
 =head1 TO DO
 
 Inflect any nouns, any words, anything...
@@ -320,15 +316,13 @@ sub _inflect_given_name {
 
 =head2 inflect_given_name
 
-Определяет пол и склоняет имя.
-Входные параметры — падеж, фамилия, имя, отчество.
-Возвращает список — фамилию, имя, отчество.
-
 Detect gender by given name and inflect this name.
 
-Expect for up to 4 arguments: I<case>, I<lastname>, I<firstname>, I<patronym>
+Expect for up to 4 arguments:
+I<case>, I<lastname>, I<firstname>, I<patronym>
 
-Return list which contains inflected I<lastname>, I<firstname>, I<patronym>
+Return list which contains
+inflected I<lastname>, I<firstname>, I<patronym>
 
 =cut
 
@@ -437,4 +431,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of Lingua::RU::Inflect
+1;
