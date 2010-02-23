@@ -323,6 +323,7 @@ Return list which contains inflected I<lastname>, I<firstname>, I<patronym>
 
 sub inflect_given_name {
     my $case = shift;
+    return @_ if $case eq NOMINATIVE;
     my @name = _inflect_given_name( detect_gender_by_given_name( @_ ), $case, @_ );
 } # sub inflect_given_name
 
