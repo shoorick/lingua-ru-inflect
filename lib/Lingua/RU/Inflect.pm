@@ -15,6 +15,9 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
+our ($REVISION, $DATE);
+($REVISION) = q$Revision$ =~ /(\d+)/g;
+($DATE)     = q$Date$ =~ /: (\d+)\s*$/g;
 
 
 BEGIN {
