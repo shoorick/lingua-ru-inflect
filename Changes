@@ -1,5 +1,6 @@
 Revision history for Lingua-RU-Inflect
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.01    24 Feb 2010
+        First version, which inflect russian given names and detect gender by name.
+        Complex names are ignored.
 
