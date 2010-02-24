@@ -6,7 +6,7 @@ use utf8;
 
 =head1 NAME
 
-Lingua::RU::Inflect — Inflect russian names.
+Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
