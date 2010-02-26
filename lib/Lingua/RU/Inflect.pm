@@ -31,6 +31,8 @@ BEGIN {
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
         inflect_given_name detect_gender_by_given_name
+        choose_preposition_about_by_next_word
+        choose_preposition_with_by_next_word
     );
 
     # exported package globals
@@ -39,10 +41,16 @@ BEGIN {
         ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
         %CASES
         MASCULINE FEMININE
+        so ob
     );
 
     %EXPORT_TAGS = (
-        'subs'    => [ qw( inflect_given_name detect_gender_by_given_name ) ],
+        'subs'    => [ qw(
+            inflect_given_name detect_gender_by_given_name
+            choose_preposition_about_by_next_word
+            choose_preposition_with_by_next_word
+        ) ],
+        'short'   => [ qw( so ob ) ],
         'genders' => [ qw( MASCULINE  FEMININE ) ],
         'cases'   => [ qw( NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL %CASES ) ],
         'all'     => [ @EXPORT, @EXPORT_OK ],
@@ -213,8 +221,9 @@ sub detect_gender_by_given_name {
 =head2 _inflect_given_name
 
 Inflect name of given gender to given case.
-Up to 5 arguments expected: gender, case, lastname, firstname, patronym.
-Lastname, firstname, patronym must be in Nominative.
+Up to 5 arguments expected:
+I<gender>, I<case>, I<lastname>, I<firstname>, I<patronym>.
+I<Lastname>, I<firstname>, I<patronym> must be in Nominative.
 
 Return list contains inflected lastname, firstname, patronym.
 
@@ -336,6 +345,73 @@ sub inflect_given_name {
     my @name = _inflect_given_name( detect_gender_by_given_name( @_ ), $case, @_ );
 } # sub inflect_given_name
 
+
+=head2 choose_preposition_about_by_next_word
+
+=head2 ob
+
+Choose preposition “o” or “ob” (about) which depends upon next word:
+“o” if next word begins with consonant or iotified vowel (“ye”, “yo”, “yu”, “ya”),
+“ob” otherwise.
+
+There is few exceptions: words “mne”, “vsekh”, “vsyom” require preposition “obo”.
+
+C<ob> is an alias for C<choose_preposition_about_by_next_word>
+
+Example:
+
+    map {
+        print choose_preposition_about_by_next_word, $_;
+    } qw(
+        арбузе баране Елене ёлке игле йоде мне огне паре ухе юге яблоке
+    );
+
+
+=cut
+
+sub choose_preposition_about_by_next_word {
+    local $_ = lc shift or return undef;
+    return 'об' if /^[аиоуыэ]/;
+    foreach my $word ( &_ABOUT_OBO_WORDS ) {
+        return 'обо' if $_ eq lc $word;
+    }
+    return 'о';
+} # sub choose_preposition_about_by_next_word
+
+
+=head2 choose_preposition_with_by_next_word
+
+=head2 so
+
+Choose preposition “s” or “so” (with) which depends upon next word:
+“so” if next word begins with “s” following by consonant,
+“s” otherwise.
+
+C<so> is an alias for C<choose_preposition_with_by_next_word>
+
+Example:
+
+    map {
+        print choose_preposition_with_by_next_word, $_;
+    } qw(
+        огнём садом светом слоном спичками ссылкой
+        Стёпой стаканом сухарём сэром топором
+    );
+
+=cut
+
+sub choose_preposition_with_by_next_word {
+    local $_ = shift or return undef;
+    return
+        /^с[^аеёиоуыэюя]/i
+        ? 'со'
+        : 'с';
+}
+
+# Aliases
+*ob = \&choose_preposition_about_by_next_word;
+*so = \&choose_preposition_with_by_next_word;
+
 # Exceptions:
 
 # Masculine names which ends to vowels “a” and “ya”
@@ -372,15 +448,19 @@ sub _FEMININE_NAMES {
     )
 }
 
+# Ambiguous names which can be masculine and feminine
 sub _AMBIGUOUS_NAMES {
     return qw(
         Женя Мина Паша Саша Шура
     )
 }
 
-=head1 SEE ALSO
+# Words which require preposition “obo” instead of “о”
+# TODO Check by dictionary
+sub _ABOUT_OBO_WORDS {
+    return qw( всех всём мне )
+}
 
-L<http://www.imena.org/declension.html> (in Russian)
 
 =head1 AUTHOR
 
@@ -420,8 +500,9 @@ L<http://search.cpan.org/dist/Lingua-RU-Inflect/>
 
 =back
 
-
 =head1 ACKNOWLEDGEMENTS
+
+L<http://www.imena.org/declension.html> (in Russian) for rules of declension.
 
 =head1 COPYRIGHT & LICENSE
 
