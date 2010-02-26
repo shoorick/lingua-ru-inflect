@@ -4,17 +4,18 @@ use warnings;
 use strict;
 use utf8;
 
+=encoding UTF-8
+
 =head1 NAME
 
 Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
 our ($REVISION, $DATE);
 ($REVISION) = q$Revision$ =~ /(\d+)/g;
 ($DATE)     = q$Date$ =~ /: (\d+)\s*$/g;
@@ -25,7 +26,7 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
     # set the version for version checking
-    $VERSION     = 0.01;
+    $VERSION     = 0.02;
 
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
