@@ -408,6 +408,62 @@ sub choose_preposition_with_by_next_word {
         : 'с';
 }
 
+=head2 choose_preposition_by_next_word
+
+Choose preposition by next word.
+
+Expect 2 arguments: I<preposition> and I<next_word>.
+Available values for I<preposition> are: “с”
+
+
+=cut
+
+sub choose_preposition_by_next_word {
+    my $preposition = lc shift or return undef;
+    local $_        = lc shift or return undef;
+
+    # preposition => [ rules ]
+    # rules are: regexp, function
+    my %GRAMMAR = (
+        'в' => sub {
+            /^в[^аеёиоуыэюя]/i ? 'во' : 'в'
+        },
+        'на' => sub {
+        },
+        'к' => sub {
+        },
+        'на' => sub {
+        },
+        'o' => sub {
+            my %OBO;
+            map { $OBO{$_}++ } ( &_ABOUT_OBO_WORDS );
+            /^[аиоуыэ]/
+            ? 'об'
+            : (
+                exists $OBO{$_}
+                ? 'обо'
+                : 'о'
+            )
+        },
+        'перед' => sub {
+        },
+        'под' => sub {
+        },
+        'пред' => sub {
+        },
+        'с' => sub {
+            /^с[^аеёиоуыэюя]/i ? 'со' : 'с'
+        },
+    );
+
+    return undef unless exists $GRAMMAR{$preposition};
+
+    $GRAMMAR{$preposition}->($_);
+
+} # sub choose_preposition_by_next_word
+
+
+
 # Aliases
 *ob = \&choose_preposition_about_by_next_word;
 *so = \&choose_preposition_with_by_next_word;
@@ -451,7 +507,7 @@ sub _FEMININE_NAMES {
 # Ambiguous names which can be masculine and feminine
 sub _AMBIGUOUS_NAMES {
     return qw(
-        Женя Мина Паша Саша Шура
+        Валя Женя Мина Паша Саша Шура
     )
 }
 
