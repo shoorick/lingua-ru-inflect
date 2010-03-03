@@ -277,7 +277,10 @@ sub _inflect_given_name {
         last if $firstname =~ /[аеёиоуыэюя]а$/i;
         last if $firstname =~ /[аёоуыэюя]я$/i;
         last
-            if $gender != MASCULINE
+            if (
+                !defined $gender
+                || $gender == FEMININE
+            )
             && $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i;
 
         last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
@@ -362,7 +365,7 @@ sub inflect_given_name {
 } # sub inflect_given_name
 
 
-=head2 choose_preposition_about_by_next_word
+=head2 DELETED choose_preposition_about_by_next_word
 
 =head2 ob
 
@@ -374,7 +377,7 @@ or iotified vowel (“ye”, “yo”, “yu”, “ya”),
 There is few exceptions: words “mne”, “vsekh”, “vsyom”
 require preposition “obo”.
 
-C<ob> is an alias for C<choose_preposition_about_by_next_word>
+C<ob> is an alias for C<choose_preposition_by_next_word 'о',>
 
 Example:
 
@@ -384,20 +387,7 @@ Example:
         арбузе баране Елене ёлке игле йоде мне огне паре ухе юге яблоке
     );
 
-
-=cut
-
-sub choose_preposition_about_by_next_word {
-    local $_ = lc shift or return undef;
-    return 'об' if /^[аиоуыэ]/;
-    foreach my $word ( &_ABOUT_OBO_WORDS ) {
-        return 'обо' if $_ eq lc $word;
-    }
-    return 'о';
-} # sub choose_preposition_about_by_next_word
-
-
-=head2 choose_preposition_with_by_next_word
+=head2 DELETED choose_preposition_with_by_next_word
 
 =head2 so
 
@@ -405,7 +395,7 @@ Choose preposition “s” or “so” (with) which depends upon next word:
 “so” if next word begins with “s” following by consonant,
 “s” otherwise.
 
-C<so> is an alias for C<choose_preposition_with_by_next_word>
+C<so> is an alias for C<choose_preposition_by_next_word, 'с'>
 
 Example:
 
@@ -418,13 +408,6 @@ Example:
 
 =cut
 
-sub choose_preposition_with_by_next_word {
-    local $_ = shift or return undef;
-    return
-        /^с[^аеёиоуыэюя]/i
-        ? 'со'
-        : 'с';
-}
 
 =head2 choose_preposition_by_next_word
 
@@ -440,38 +423,54 @@ sub choose_preposition_by_next_word {
     my $preposition = lc shift or return undef;
     local $_        = lc shift or return undef;
 
+    # Nested subroutine
+    local *_check_instrumental = sub {
+        for my $word qw( мной мною ) {
+            return $_ . 'о' if $word eq $_
+        }
+        $_
+    }; # _check_instrumental
+
     # preposition => [ rules ]
     # rules are: regexp, function
+    # TODO Check by dictionary
     my %GRAMMAR = (
         'в' => sub {
-            /^в[^аеёиоуыэюя]/i ? 'во' : 'в'
+            for my $word qw( всех всем всём мне ) {
+                return 'во' if $word eq $_
+            }
+            /^в[^аеёиоуыэюя]/
+            ? 'во'
+            : 'в'
         },
-        'на' => sub {
+        'из' => sub {
+            for my $word qw( всех ) {
+                return 'изо' if $word eq $_
+            }
+            'из'
         },
         'к' => sub {
-        },
-        'на' => sub {
+            for my $word qw( всем мне ) {
+                return 'ко' if $word eq $_
+            }
+            'к'
         },
         'o' => sub {
-            my %OBO;
-            map { $OBO{$_}++ } ( &_ABOUT_OBO_WORDS );
+            for my $word qw( всех всем всём мне ) {
+                return 'обо' if $word eq $_
+            }
             /^[аиоуыэ]/
             ? 'об'
-            : (
-                exists $OBO{$_}
-                ? 'обо'
-                : 'о'
-            )
-        },
-        'перед' => sub {
-        },
-        'под' => sub {
-        },
-        'пред' => sub {
+            : 'о'
         },
         'с' => sub {
-            /^с[^аеёиоуыэюя]/i ? 'со' : 'с'
+            /^[жзсш][^аеёиоуыэюя]/i ? 'со' : 'с'
         },
+        # Same rules:
+        'над'   => _check_instrumental('над'),
+        'под'   => _check_instrumental('под'),
+        'перед' => _check_instrumental('перед'),
+        'пред'  => _check_instrumental('пред'),
     );
 
     return undef unless exists $GRAMMAR{$preposition};
@@ -480,11 +479,9 @@ sub choose_preposition_by_next_word {
 
 } # sub choose_preposition_by_next_word
 
-
-
 # Aliases
-*ob = \&choose_preposition_about_by_next_word;
-*so = \&choose_preposition_with_by_next_word;
+*ob = sub { choose_preposition_by_next_word 'о', shift };
+*so = sub { choose_preposition_by_next_word 'с', shift };
 
 # Exceptions:
 
@@ -528,13 +525,6 @@ sub _AMBIGUOUS_NAMES {
         Валя Женя Мина Паша Саша Шура
     )
 }
-
-# Words which require preposition “obo” instead of “о”
-# TODO Check by dictionary
-sub _ABOUT_OBO_WORDS {
-    return qw( всех всём мне )
-}
-
 
 =head1 AUTHOR
 
