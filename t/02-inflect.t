@@ -17,6 +17,12 @@ ok( join(' ', f( GENITIVE, 'Иванов', 'Сергей', 'Михайлович
 ok( join(' ', f( DATIVE, 'Ильин', 'Роман' ))
     eq 'Ильину Роману ',
     'Dative of usual russian masculine name without patronym: Roman Ilyin' );
+ok( join(' ', f( DATIVE, 'Ильиных', 'Роман' ))
+    eq 'Ильиных Роману ',
+    'Dative of russian masculine name with undeclinable lastname and without patronym: Roman Ilyinykh' );
+ok( join(' ', f( DATIVE, 'Кох', 'Роман' ))
+    eq 'Коху Роману ',
+    'Dative of russian masculine name with declinable foreign lastname and without patronym: Roman Koch' );
 ok( join(' ', f( ACCUSATIVE, undef, undef, 'Михалыч' ))
     eq '  Михалыча',
     'Accusative of vulgar form of russian patronym: Mikhalych' );

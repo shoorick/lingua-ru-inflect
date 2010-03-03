@@ -310,9 +310,10 @@ sub _inflect_given_name {
         # Indeclinable
         last if $lastname =~ /[еёиоуыэю]$/i;
         last if $lastname =~ /[аеёиоуыэюя]а$/i;
-        last if $lastname =~ /[ёоуыэю]я$/i;
         # Lastnames such as “Belaya” and “Sinyaya”
         #  which ends to “aya” and “yaya” must be inflected
+        last if $lastname =~ /[ёоуыэю]я$/i;
+        last if $lastname =~ /[иы]х$/i;
 
         # Feminine lastnames
         last
