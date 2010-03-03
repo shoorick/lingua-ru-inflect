@@ -382,7 +382,7 @@ C<ob> is an alias for C<choose_preposition_by_next_word 'о',>
 Example:
 
     map {
-        print choose_preposition_about_by_next_word, $_;
+        print ob, $_;
     } qw(
         арбузе баране Елене ёлке игле йоде мне огне паре ухе юге яблоке
     );
@@ -400,7 +400,7 @@ C<so> is an alias for C<choose_preposition_by_next_word, 'с'>
 Example:
 
     map {
-        print choose_preposition_with_by_next_word, $_;
+        print so, $_;
     } qw(
         огнём садом светом слоном спичками ссылкой
         Стёпой стаканом сухарём сэром топором
