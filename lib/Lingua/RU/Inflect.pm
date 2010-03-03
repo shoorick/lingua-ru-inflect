@@ -19,7 +19,7 @@ Version 0.02
 Lingua::RU::Inflect is a perl module
 that provides Russian linguistic procedures
 such as declension of given names (with some nouns and adjectives too),
-detection gender by given name
+gender detection by given name
 and choosing of proper forms of varying prepositions.
 
 =cut
@@ -95,19 +95,21 @@ use constant {
 
 =head1 SYNOPSIS
 
-Inflect russian names which represented in UTF-8.
+Inflects russian names which represented in UTF-8.
 
 Perhaps a little code snippet.
 
     use Lingua::RU::Inflect;
 
     my @name = qw/Петрова Любовь Степановна/;
+    # Transliteration of above line is: Petrova Lyubov' Stepanovna
 
     my $gender = detect_gender_by_given_name(@name);
     # $gender == FEMININE
 
     my @genitive = inflect_given_name(GENITIVE, @name);
     # $genitive == qw/Петровой Любови Степановны/;
+    # Transliteration of above line is: Petrovoy Lyubovi Stepanovny
 
 =head1 TO DO
 
@@ -234,12 +236,12 @@ sub detect_gender_by_given_name {
 
 =head2 _inflect_given_name
 
-Inflect name of given gender to given case.
+Inflects name of given gender to given case.
 Up to 5 arguments expected:
 I<gender>, I<case>, I<lastname>, I<firstname>, I<patronym>.
 I<Lastname>, I<firstname>, I<patronym> must be in Nominative.
 
-Return list contains inflected lastname, firstname, patronym.
+Returns list which contains inflected I<lastname>, I<firstname>, I<patronym>.
 
 =cut
 
@@ -349,15 +351,15 @@ sub _inflect_given_name {
 
 =head2 inflect_given_name
 
-Detect gender by given name and inflect this name.
+Detects gender by given name and inflect parts of this name.
 
-Expect for up to 4 arguments:
+Expects for up to 4 arguments:
 I<case>, I<lastname>, I<firstname>, I<patronym>
 
 Available I<cases> are: C<NOMINATIVE>, C<GENITIVE>, C<DATIVE>,
 C<ACCUSATIVE>, C<INSTRUMENTAL>, C<PREPOSITIONAL>.
 
-Return list which contains
+It returns list which contains
 inflected I<lastname>, I<firstname>, I<patronym>
 
 =cut
@@ -373,15 +375,15 @@ sub inflect_given_name {
 
 =head2 choose_preposition_by_next_word
 
-Choose preposition by next word.
+Chooses preposition by next word and returns chosen preposition.
 
-Expect 2 arguments: I<preposition> and I<next_word>.
+Expects 2 arguments: I<preposition> and I<next_word>.
 I<Preposition> should be string with shortest of possible values.
 Available values of I<preposition> are:
 C<'в'>, C<'из'>, C<'к'>, C<'над'>, C<'о'>, C<'от'>, C<'пред'>, C<'перед'>,
 C<'под'> and  C<'с'>.
 
-There is aliases for calling this subroutine with common preposition:
+There is an aliases for calling this subroutine with common preposition:
 
 =head3 izo
 
@@ -425,7 +427,7 @@ C<vo> is an alias for C<choose_preposition_by_next_word 'в',>
 
 These aliases are not exported by default. They can be expored with tags C<:short> or C<:all>.
 
-Examples with these aliases:
+Examples of code with these aliases:
 
     use Lingua::RU::Inflect qw/:short/;
 

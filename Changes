@@ -4,3 +4,8 @@ Revision history for Lingua-RU-Inflect
         First version, which inflect russian given names and detect gender by name.
         Complex names are ignored.
 
+0.02    04 Mar 2010
+        Included documentation in Russian.
+        Sub choose_prepositions_by_next_word and its aliases was added.
+        More tests was added.
+        Some bugs fixed.
