@@ -14,11 +14,20 @@ Lingua::RU::Inflect - Inflect russian names.
 
 Version 0.02
 
+=head1 DESCRIPTION
+
+Lingua::RU::Inflect is a perl module
+that provides Russian linguistic procedures
+such as declension of given names (with some nouns and adjectives too),
+detection gender by given name
+and choosing of proper forms of varying prepositions.
+
 =cut
 
 our ($REVISION, $DATE);
 ($REVISION) = q$Revision$ =~ /(\d+)/g;
-($DATE)     = q$Date$ =~ /: (\d+)\s*$/g;
+($DATE)
+    = q$Date$ =~ /: (\d+)\s*$/g;
 
 
 BEGIN {
@@ -52,7 +61,10 @@ BEGIN {
         ) ],
         'short'   => [ qw( so ob ) ],
         'genders' => [ qw( MASCULINE  FEMININE ) ],
-        'cases'   => [ qw( NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL %CASES ) ],
+        'cases'   => [ qw(
+            NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
+            %CASES
+        ) ],
         'all'     => [ @EXPORT, @EXPORT_OK ],
     )
 
@@ -264,7 +276,9 @@ sub _inflect_given_name {
         last if $firstname =~ /[еёиоуыэю]$/i;
         last if $firstname =~ /[аеёиоуыэюя]а$/i;
         last if $firstname =~ /[аёоуыэюя]я$/i;
-        last if $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i && $gender != MASCULINE;
+        last
+            if $gender != MASCULINE
+            && $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i;
 
         last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
@@ -342,7 +356,9 @@ inflected I<lastname>, I<firstname>, I<patronym>
 sub inflect_given_name {
     my $case = shift;
     return @_ if $case eq NOMINATIVE;
-    my @name = _inflect_given_name( detect_gender_by_given_name( @_ ), $case, @_ );
+    my @name = _inflect_given_name(
+        detect_gender_by_given_name( @_ ), $case, @_
+    );
 } # sub inflect_given_name
 
 
@@ -351,10 +367,12 @@ sub inflect_given_name {
 =head2 ob
 
 Choose preposition “o” or “ob” (about) which depends upon next word:
-“o” if next word begins with consonant or iotified vowel (“ye”, “yo”, “yu”, “ya”),
+“o” if next word begins with consonant
+or iotified vowel (“ye”, “yo”, “yu”, “ya”),
 “ob” otherwise.
 
-There is few exceptions: words “mne”, “vsekh”, “vsyom” require preposition “obo”.
+There is few exceptions: words “mne”, “vsekh”, “vsyom”
+require preposition “obo”.
 
 C<ob> is an alias for C<choose_preposition_about_by_next_word>
 
@@ -480,9 +498,9 @@ sub _MASCULINE_NAMES {
         Иешуа Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
         Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша
         Муртаза Муса Мусса Мустафа Никита Нэта Нэхэмья Овадья Петя Птахья
-        Рахматулла Риза Рома Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия Толя
-        Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра Элиша
-        Элькана Юмагужа Ярулла Яхья Яша
+        Рахматулла Риза Рома Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия
+        Толя Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра
+        Элиша Элькана Юмагужа Ярулла Яхья Яша
     )
 }
 
@@ -524,9 +542,11 @@ Alexander Sapozhnikov, C<< <shoorick at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-lingua-ru-inflect at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests
+to C<bug-lingua-ru-inflect at rt.cpan.org>, or through the web interface
+at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>.
+I will be notified, and then
+you'll automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
