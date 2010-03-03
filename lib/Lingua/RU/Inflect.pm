@@ -455,14 +455,13 @@ sub choose_preposition_by_next_word {
 
     # Nested subroutine
     local *_check_instrumental = sub {
-        for my $word qw( мной мною ) {
+        for my $word qw( льдом льном мной мною ) {
             return $_[0] . 'о' if $word eq $_[1]
         }
-        $_
+        return $_[0]
     }; # _check_instrumental
 
-    # preposition => [ rules ]
-    # rules are: regexp, function
+    # preposition => function
     # TODO Check by dictionary
     my %GRAMMAR = (
         'в' => sub {
