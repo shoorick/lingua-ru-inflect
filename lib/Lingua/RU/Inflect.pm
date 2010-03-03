@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use utf8;
 
-=encoding UTF-8
+=encoding utf8
 
 =head1 NAME
 
@@ -40,8 +40,7 @@ BEGIN {
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
         inflect_given_name detect_gender_by_given_name
-        choose_preposition_about_by_next_word
-        choose_preposition_with_by_next_word
+        choose_preposition_by_next_word
     );
 
     # exported package globals
@@ -50,16 +49,15 @@ BEGIN {
         ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
         %CASES
         MASCULINE FEMININE
-        so ob
+        izo ko nado ob oto predo peredo podo so vo
     );
 
     %EXPORT_TAGS = (
         'subs'    => [ qw(
             inflect_given_name detect_gender_by_given_name
-            choose_preposition_about_by_next_word
-            choose_preposition_with_by_next_word
+            choose_preposition_by_next_word
         ) ],
-        'short'   => [ qw( so ob ) ],
+        'short'   => [ qw( izo ko nado ob oto predo peredo podo so vo ) ],
         'genders' => [ qw( MASCULINE  FEMININE ) ],
         'cases'   => [ qw(
             NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
@@ -128,10 +126,14 @@ Or only subs and genders
 
     use Lingua::RU::Inflect qw/:subs :genders/;
 
-Or everything: subs, genders and case names:
+Or only short aliases for subs
+
+    use Lingua::RU::Inflect qw/:short/;
+
+Or everything: subs, aliases, genders and case names:
 
     use Lingua::RU::Inflect qw/:all/; # or
-    use Lingua::RU::Inflect qw/:cases :genders :subs/;
+    use Lingua::RU::Inflect qw/:cases :genders :subs :short/;
 
 =head1 FUNCTIONS
 
@@ -213,17 +215,17 @@ sub detect_gender_by_given_name {
 
     unless ( $ambiguous ) {
         # Feminine firstnames ends to vowels
-        return FEMININE if $firstname =~ /[ая]$/;
+        return FEMININE  if $firstname =~ /[ая]$/;
         # Masculine firstnames ends to consonants
         return MASCULINE if $firstname !~ /[аеёиоуыэюя]$/;
     } # unless
 
     # Detect by lastname
     # possessive names
-    return FEMININE if $lastname =~ /(ев|ин|ын|ёв|ов)а$/;
+    return FEMININE  if $lastname =~ /(ев|ин|ын|ёв|ов)а$/;
     return MASCULINE if $lastname =~ /(ев|ин|ын|ёв|ов)$/;
     # adjectives
-    return FEMININE if $lastname =~ /(ая|яя)$/;
+    return FEMININE  if $lastname =~ /(ая|яя)$/;
     return MASCULINE if $lastname =~ /(ий|ый)$/;
 
     # Unknown or ambiguous name
@@ -351,6 +353,9 @@ Detect gender by given name and inflect this name.
 Expect for up to 4 arguments:
 I<case>, I<lastname>, I<firstname>, I<patronym>
 
+Available I<cases> are: C<NOMINATIVE>, C<GENITIVE>, C<DATIVE>,
+C<ACCUSATIVE>, C<INSTRUMENTAL>, C<PREPOSITIONAL>.
+
 Return list which contains
 inflected I<lastname>, I<firstname>, I<patronym>
 
@@ -365,57 +370,81 @@ sub inflect_given_name {
 } # sub inflect_given_name
 
 
-=head2 DELETED choose_preposition_about_by_next_word
-
-=head2 ob
-
-Choose preposition “o” or “ob” (about) which depends upon next word:
-“o” if next word begins with consonant
-or iotified vowel (“ye”, “yo”, “yu”, “ya”),
-“ob” otherwise.
-
-There is few exceptions: words “mne”, “vsekh”, “vsyom”
-require preposition “obo”.
-
-C<ob> is an alias for C<choose_preposition_by_next_word 'о',>
-
-Example:
-
-    map {
-        print ob, $_;
-    } qw(
-        арбузе баране Елене ёлке игле йоде мне огне паре ухе юге яблоке
-    );
-
-=head2 DELETED choose_preposition_with_by_next_word
-
-=head2 so
-
-Choose preposition “s” or “so” (with) which depends upon next word:
-“so” if next word begins with “s” following by consonant,
-“s” otherwise.
-
-C<so> is an alias for C<choose_preposition_by_next_word, 'с'>
-
-Example:
-
-    map {
-        print so, $_;
-    } qw(
-        огнём садом светом слоном спичками ссылкой
-        Стёпой стаканом сухарём сэром топором
-    );
-
-=cut
-
-
 =head2 choose_preposition_by_next_word
 
 Choose preposition by next word.
 
 Expect 2 arguments: I<preposition> and I<next_word>.
-Available values for I<preposition> are: “с”
+I<Preposition> should be string with shortest of possible values.
+Available values of I<preposition> are:
+C<'в'>, C<'из'>, C<'к'>, C<'над'>, C<'о'>, C<'от'>, C<'пред'>, C<'перед'>,
+C<'под'> and  C<'с'>.
 
+There is aliases for calling this subroutine with common preposition:
+
+=head3 izo
+
+C<izo> is an alias for C<choose_preposition_by_next_word 'из',>
+
+=head3 ko
+
+C<ko> is an alias for C<choose_preposition_by_next_word 'к',>
+
+=head3 nado
+
+C<nado> is an alias for C<choose_preposition_by_next_word 'над',>
+
+=head3 ob
+
+C<ob> is an alias for C<choose_preposition_by_next_word 'о',>
+
+=head3 oto
+
+C<oto> is an alias for C<choose_preposition_by_next_word 'от',>
+
+=head3 podo
+
+C<podo> is an alias for C<choose_preposition_by_next_word 'под',>
+
+=head3 predo
+
+C<predo> is an alias for C<choose_preposition_by_next_word 'пред',>
+
+=head3 peredo
+
+C<peredo> is an alias for C<choose_preposition_by_next_word 'перед',>
+
+=head3 so
+
+C<so> is an alias for C<choose_preposition_by_next_word 'с',>
+
+=head3 vo
+
+C<vo> is an alias for C<choose_preposition_by_next_word 'в',>
+
+These aliases are not exported by default. They can be expored with tags C<:short> or C<:all>.
+
+Examples with these aliases:
+
+    use Lingua::RU::Inflect qw/:short/;
+
+    map {
+        print ob, $_;
+    } qw(
+        арбузе баране всём Елене ёлке игле йоде
+        мне многом огне паре ухе юге яблоке
+    );
+
+    map {
+        print so, $_;
+    } qw(
+        огнём водой
+        зарёй зноем зрением зябликом
+        садом светом слоном спичками ссылкой
+        Стёпой стаканом сухарём сэром топором
+        жарой жбаном жратвой жуком
+        шаром шкафом шлангом шубой
+    );
 
 =cut
 
@@ -426,7 +455,7 @@ sub choose_preposition_by_next_word {
     # Nested subroutine
     local *_check_instrumental = sub {
         for my $word qw( мной мною ) {
-            return $_ . 'о' if $word eq $_
+            return $_[0] . 'о' if $word eq $_[1]
         }
         $_
     }; # _check_instrumental
@@ -436,10 +465,10 @@ sub choose_preposition_by_next_word {
     # TODO Check by dictionary
     my %GRAMMAR = (
         'в' => sub {
-            for my $word qw( всех всем всём мне ) {
-                return 'во' if $word eq $_
+            for my $word qw( все всём мне мно ) {
+                return 'во' if /^$word/
             }
-            /^в[^аеёиоуыэюя]/
+            /^[вф][^аеёиоуыэюя]/
             ? 'во'
             : 'в'
         },
@@ -450,27 +479,38 @@ sub choose_preposition_by_next_word {
             'из'
         },
         'к' => sub {
-            for my $word qw( всем мне ) {
-                return 'ко' if $word eq $_
+            for my $word qw( всем мне мно ) {
+                return 'ко' if /^$word/
             }
             'к'
         },
-        'o' => sub {
+        'о' => sub {
             for my $word qw( всех всем всём мне ) {
                 return 'обо' if $word eq $_
             }
-            /^[аиоуыэ]/
-            ? 'об'
-            : 'о'
+            return
+                /^[аиоуыэ]/
+                ? 'об'
+                : 'о'
+        },
+        'от' => sub {
+            for my $word qw( всех ) {
+                return 'ото' if $word eq $_
+            }
+            'от'
         },
         'с' => sub {
-            /^[жзсш][^аеёиоуыэюя]/i ? 'со' : 'с'
+            return 'со' if /^мно/;
+            return
+                /^[жзсш][^аеёиоуыэюя]/i
+                ? 'со'
+                : 'с'
         },
         # Same rules:
-        'над'   => _check_instrumental('над'),
-        'под'   => _check_instrumental('под'),
-        'перед' => _check_instrumental('перед'),
-        'пред'  => _check_instrumental('пред'),
+        'над'   => sub { _check_instrumental('над',   $_) },
+        'под'   => sub { _check_instrumental('под',   $_) },
+        'перед' => sub { _check_instrumental('перед', $_) },
+        'пред'  => sub { _check_instrumental('пред',  $_) },
     );
 
     return undef unless exists $GRAMMAR{$preposition};
@@ -480,8 +520,16 @@ sub choose_preposition_by_next_word {
 } # sub choose_preposition_by_next_word
 
 # Aliases
-*ob = sub { choose_preposition_by_next_word 'о', shift };
-*so = sub { choose_preposition_by_next_word 'с', shift };
+*izo    = sub { choose_preposition_by_next_word 'из',    shift };
+*ko     = sub { choose_preposition_by_next_word 'к',     shift };
+*nado   = sub { choose_preposition_by_next_word 'над',   shift };
+*ob     = sub { choose_preposition_by_next_word 'о',     shift };
+*oto    = sub { choose_preposition_by_next_word 'от',    shift };
+*predo  = sub { choose_preposition_by_next_word 'пред',  shift };
+*peredo = sub { choose_preposition_by_next_word 'перед', shift };
+*podo   = sub { choose_preposition_by_next_word 'под',   shift };
+*so     = sub { choose_preposition_by_next_word 'с',     shift };
+*vo     = sub { choose_preposition_by_next_word 'в',     shift };
 
 # Exceptions:
 
@@ -565,6 +613,11 @@ L<http://cpanratings.perl.org/d/Lingua-RU-Inflect>
 L<http://search.cpan.org/dist/Lingua-RU-Inflect/>
 
 =back
+
+=head1 SEE ALSO
+
+Russian translation of this documentation available
+at F<RU/Lingua/RU/Inflect.pod>
 
 =head1 ACKNOWLEDGEMENTS
 
