@@ -12,7 +12,7 @@ Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 DESCRIPTION
 
@@ -35,7 +35,7 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
     # set the version for version checking
-    $VERSION     = 0.02;
+    $VERSION     = 0.03;
 
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
@@ -249,6 +249,7 @@ sub _inflect_given_name {
     my $gender = shift;
     my $case   = shift;
 
+    return @_ if $case eq NOMINATIVE;
     return
         if $case < GENITIVE
         || $case > PREPOSITIONAL;
@@ -451,7 +452,7 @@ Examples of code with these aliases:
 
 =cut
 
-sub choose_preposition_by_next_word {
+sub choose_preposition_by_next_word ($$) {
     my $preposition = lc shift or return undef;
     local $_        = lc shift or return undef;
 
@@ -536,14 +537,14 @@ sub choose_preposition_by_next_word {
 # Exceptions:
 
 # Masculine names which ends to vowels “a” and “ya”
-sub _MASCULINE_NAMES {
+sub _MASCULINE_NAMES () {
     return qw(
         Аба Азарья Акива Аккужа Аникита Алёша Андрюха Андрюша Аса Байгужа
         Вафа Ваня Вася Витя Вова Володя Габдулла Габидулла Гаврила Гадельша
         Гайнулла Гайса Гайфулла Галиулла Гарри Гата Гдалья Гийора Гиля Гошеа
         Данила Джиханша Дима Зайнулла Закария Зия Зосима Зхарья Зыя Идельгужа
-        Иешуа Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
-        Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша
+        Иешуа Изя Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
+        Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша Моня
         Муртаза Муса Мусса Мустафа Никита Нэта Нэхэмья Овадья Петя Птахья
         Рахматулла Риза Рома Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия
         Толя Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра
@@ -552,7 +553,7 @@ sub _MASCULINE_NAMES {
 }
 
 # Feminine names which ends to consonants
-sub _FEMININE_NAMES {
+sub _FEMININE_NAMES () {
     return qw(
         Айгуль Айгюль Айзиряк Айрис Альфинур Асылгюль Бадар Бадиян Банат Бедер
         Бибикамал Бибинур Гайниджамал Гайникамал Гаухар Гиффат Гулендем
@@ -570,7 +571,7 @@ sub _FEMININE_NAMES {
 }
 
 # Ambiguous names which can be masculine and feminine
-sub _AMBIGUOUS_NAMES {
+sub _AMBIGUOUS_NAMES () {
     return qw(
         Валя Женя Мина Паша Саша Шура
     )

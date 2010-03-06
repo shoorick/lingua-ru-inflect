@@ -6,6 +6,9 @@ Revision history for Lingua-RU-Inflect
 
 0.02    04 Mar 2010
         Included documentation in Russian.
-        Sub choose_prepositions_by_next_word and its aliases was added.
+        Sub choose_preposition_by_next_word and its aliases was added.
         More tests was added.
-        Some bugs fixed.
+        Some bugs was fixed.
+
+0.03    14 Mar 2010
+        Arguments can be transmitted to functions as list or hashes.
