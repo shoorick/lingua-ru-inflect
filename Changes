@@ -10,5 +10,7 @@ Revision history for Lingua-RU-Inflect
         More tests was added.
         Some bugs was fixed.
 
-0.03    14 Mar 2010
+0.03    18 Feb 2011
         Arguments can be transmitted to functions as list or hashes.
+        Prepositional subs and aliases now DEPRECATED, they moved
+        to Lingua::RU::Preposition
