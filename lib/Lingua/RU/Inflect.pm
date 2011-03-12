@@ -294,6 +294,7 @@ sub _inflect_given_name {
 
         last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
+        last if $firstname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e; # common nouns such as “Imya” (Name)
         last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
         last if $firstname =~ s/й$/qw(я ю я ем е)[$case]/e;
 
@@ -343,6 +344,7 @@ sub _inflect_given_name {
         # Rest of masculine lastnames
         if ( $gender == MASCULINE ) {
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
+            last if $lastname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e;
             last if $lastname =~ s/я$/qw(и е ю ёй е)[$case]/e;
             last if $lastname =~ s/й$/qw(я ю й ем е)[$case]/e;
             last if $lastname =~ s/ь$/qw(я ю я ем е)[$case]/e;
