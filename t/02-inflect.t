@@ -71,6 +71,12 @@ ok( join(' ', f( INSTRUMENTAL, 'Соколова', 'Инна' ))
 ok( join(' ', f( PREPOSITIONAL,  undef, 'Маргарита', 'Пална' ))
     eq ' Маргарите Палне',
     'Prepositional case of russian feminine firstname with vulgar form of patronym: Margarita Palna' );
+ok( join(' ', f( GENITIVE,  'Иванова', 'Ольга' ))
+    eq 'Ивановой Ольги ',
+    'Genitive of russian feminine name ends to [G Zh J K Kh Ch Sh Shch] with A: Olga Ivanova' );
+ok( join(' ', f( GENITIVE,  'Петрова', 'Лена' ))
+    eq 'Петровой Лены ',
+    'Genitive of russian feminine name ends to [other consonant] with A: Lena Petrova' );
 ok( join(' ', f( GENITIVE,  'Шевчук', 'Любовь' ))
     eq 'Шевчук Любови ',
     'Genitive of russian feminine name ends to consonants: Lyubov Shevchuk' );

@@ -293,6 +293,7 @@ sub _inflect_given_name {
             && $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i;
 
         last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
+        last if $firstname =~ s/([гжйкхчшщ])а$/$1.qw(и е у ой е)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
         last if $firstname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e; # common nouns such as “Imya” (Name)
         last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
