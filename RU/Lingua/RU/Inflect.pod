@@ -247,6 +247,10 @@ L<http://cpanratings.perl.org/d/Lingua-RU-Inflect>
 
 L<http://search.cpan.org/dist/Lingua-RU-Inflect/>
 
+=item * Публичный репозиторий на github
+
+L<https://github.com/shoorick/lingua-ru-inflect>
+
 =back
 
 =head1 СМ. ТАКЖЕ
@@ -255,7 +259,7 @@ L<http://www.imena.org/declension.html>
 
 =head1 АВТОР
 
-Александр Сапожников L<http://shoorick.ru/>
+Александр Сапожников L<http://shoorick.ru/> L<< E<lt>shoorick@cpan.orgE<gt> >>
 
 =head1 ЛИЦЕНЗИЯ
 

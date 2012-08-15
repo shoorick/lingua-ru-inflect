@@ -624,6 +624,10 @@ L<http://cpanratings.perl.org/d/Lingua-RU-Inflect>
 
 L<http://search.cpan.org/dist/Lingua-RU-Inflect/>
 
+=item * Public repository at github
+
+L<https://github.com/shoorick/lingua-ru-inflect>
+
 =back
 
 =head1 SEE ALSO
@@ -637,7 +641,7 @@ L<http://www.imena.org/declension.html> (in Russian) for rules of declension.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2010 Alexander Sapozhnikov.
+Copyright 2009-2012 Alexander Sapozhnikov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
