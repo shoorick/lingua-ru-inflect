@@ -328,6 +328,8 @@ sub _inflect_given_name {
         last
             if $lastname =~ /(ин|ын|ев|ёв|ов)а$/
             && $lastname =~ s/а$/qw(ой ой у ой ой)[$case]/e;
+        # TODO Does not process usual worls: Podkova, Sova etc
+        # TODO Decide/search what can I do with ambigous names: Mashina, Vagina etc
 
         # And masculine ones
         last

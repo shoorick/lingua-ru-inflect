@@ -4,7 +4,8 @@ Lingua::RU::Inflect is a perl module
 that provides Russian linguistic procedures
 such as declension of given names (with some nouns and adjectives too),
 gender detection by given name
-and choosing of proper forms of varying prepositions.
+and choosing of proper forms of varying prepositions
+(deprecated, moved to Lingua::RU::Preposition).
 
 INSTALLATION
 
