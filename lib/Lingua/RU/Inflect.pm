@@ -467,7 +467,7 @@ sub choose_preposition_by_next_word ($$) {
 
     # Nested subroutine
     local *_check_instrumental = sub {
-        for my $word qw( льдом льном мной мною ) {
+        for my $word (qw( льдом льном мной мною )) {
             return $_[0] . 'о' if $word eq $_[1]
         }
         return $_[0]
@@ -477,7 +477,7 @@ sub choose_preposition_by_next_word ($$) {
     # TODO Check by dictionary
     my %GRAMMAR = (
         'в' => sub {
-            for my $word qw( все всём мне мно ) {
+            for my $word (qw( все всём мне мно )) {
                 return 'во' if /^$word/
             }
             /^[вф][^аеёиоуыэюя]/
@@ -485,19 +485,19 @@ sub choose_preposition_by_next_word ($$) {
             : 'в'
         },
         'из' => sub {
-            for my $word qw( всех ) {
+            for my $word (qw( всех )) {
                 return 'изо' if $word eq $_
             }
             'из'
         },
         'к' => sub {
-            for my $word qw( всем мне мно ) {
+            for my $word (qw( всем мне мно )) {
                 return 'ко' if /^$word/
             }
             'к'
         },
         'о' => sub {
-            for my $word qw( всех всем всём мне ) {
+            for my $word (qw( всех всем всём мне )) {
                 return 'обо' if $word eq $_
             }
             return
@@ -506,7 +506,7 @@ sub choose_preposition_by_next_word ($$) {
                 : 'о'
         },
         'от' => sub {
-            for my $word qw( всех ) {
+            for my $word (qw( всех )) {
                 return 'ото' if $word eq $_
             }
             'от'
