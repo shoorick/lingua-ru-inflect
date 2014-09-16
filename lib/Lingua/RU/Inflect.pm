@@ -12,7 +12,7 @@ Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
-Version 0.03
+Version 0.05
 
 =head1 DESCRIPTION
 
@@ -22,8 +22,7 @@ such as declension of given names (with some nouns and adjectives too),
 and gender detection by given name.
 
 Choosing of proper forms of varying prepositions
-which added in 0.02 now DEPRECATED,
-use L<Lingua::RU::Preposition> instead.
+which added in 0.02 now is unavailable because it moved to L<Lingua::RU::Preposition>.
 
 =cut
 
@@ -38,12 +37,11 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
     # set the version for version checking
-    $VERSION     = 0.03;
+    $VERSION     = 0.05;
 
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
         inflect_given_name detect_gender_by_given_name
-        choose_preposition_by_next_word
     );
 
     # exported package globals
@@ -52,7 +50,6 @@ BEGIN {
         ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
         %CASES
         MASCULINE FEMININE
-        izo ko nado ob oto predo peredo podo so vo
     );
 
     %EXPORT_TAGS = (
@@ -60,7 +57,6 @@ BEGIN {
             inflect_given_name detect_gender_by_given_name
             choose_preposition_by_next_word
         ) ],
-        'short'   => [ qw( izo ko nado ob oto predo peredo podo so vo ) ],
         'genders' => [ qw( MASCULINE  FEMININE ) ],
         'cases'   => [ qw(
             NOMINATIVE GENITIVE DATIVE ACCUSATIVE INSTRUMENTAL PREPOSITIONAL
@@ -117,7 +113,6 @@ Perhaps a little code snippet.
 =head1 TO DO
 
 1. Inflect any nouns, any words, anything...
-2. Move preposition related function to L<Lingua::RU::Preposition>
 
 =head1 EXPORT
 
@@ -383,181 +378,21 @@ sub inflect_given_name {
 } # sub inflect_given_name
 
 
-=head2 choose_preposition_by_next_word
-
-Chooses preposition by next word and returns chosen preposition.
-
-Expects 2 arguments: I<preposition> and I<next_word>.
-I<Preposition> should be string with shortest of possible values.
-Available values of I<preposition> are:
-C<'в'>, C<'из'>, C<'к'>, C<'над'>, C<'о'>, C<'от'>, C<'пред'>, C<'перед'>,
-C<'под'> and  C<'с'>.
-
-There is an aliases for calling this subroutine with common preposition:
-
-=head3 izo
-
-C<izo> is an alias for C<choose_preposition_by_next_word 'из',>
-
-=head3 ko
-
-C<ko> is an alias for C<choose_preposition_by_next_word 'к',>
-
-=head3 nado
-
-C<nado> is an alias for C<choose_preposition_by_next_word 'над',>
-
-=head3 ob
-
-C<ob> is an alias for C<choose_preposition_by_next_word 'о',>
-
-=head3 oto
-
-C<oto> is an alias for C<choose_preposition_by_next_word 'от',>
-
-=head3 podo
-
-C<podo> is an alias for C<choose_preposition_by_next_word 'под',>
-
-=head3 predo
-
-C<predo> is an alias for C<choose_preposition_by_next_word 'пред',>
-
-=head3 peredo
-
-C<peredo> is an alias for C<choose_preposition_by_next_word 'перед',>
-
-=head3 so
-
-C<so> is an alias for C<choose_preposition_by_next_word 'с',>
-
-=head3 vo
-
-C<vo> is an alias for C<choose_preposition_by_next_word 'в',>
-
-These aliases are not exported by default. They can be expored with tags C<:short> or C<:all>.
-
-Examples of code with these aliases:
-
-    use Lingua::RU::Inflect qw/:short/;
-
-    map {
-        print ob, $_;
-    } qw(
-        арбузе баране всём Елене ёлке игле йоде
-        мне многом огне паре ухе юге яблоке
-    );
-
-    map {
-        print so, $_;
-    } qw(
-        огнём водой
-        зарёй зноем зрением зябликом
-        садом светом слоном спичками ссылкой
-        Стёпой стаканом сухарём сэром топором
-        жарой жбаном жратвой жуком
-        шаром шкафом шлангом шубой
-    );
-
-=cut
-
-sub choose_preposition_by_next_word ($$) {
-    my $preposition = lc shift or return undef;
-    local $_        = lc shift or return undef;
-
-    # Nested subroutine
-    local *_check_instrumental = sub {
-        for my $word (qw( льдом льном мной мною )) {
-            return $_[0] . 'о' if $word eq $_[1]
-        }
-        return $_[0]
-    }; # _check_instrumental
-
-    # preposition => function
-    # TODO Check by dictionary
-    my %GRAMMAR = (
-        'в' => sub {
-            for my $word (qw( все всём мне мно )) {
-                return 'во' if /^$word/
-            }
-            /^[вф][^аеёиоуыэюя]/
-            ? 'во'
-            : 'в'
-        },
-        'из' => sub {
-            for my $word (qw( всех )) {
-                return 'изо' if $word eq $_
-            }
-            'из'
-        },
-        'к' => sub {
-            for my $word (qw( всем мне мно )) {
-                return 'ко' if /^$word/
-            }
-            'к'
-        },
-        'о' => sub {
-            for my $word (qw( всех всем всём мне )) {
-                return 'обо' if $word eq $_
-            }
-            return
-                /^[аиоуыэ]/
-                ? 'об'
-                : 'о'
-        },
-        'от' => sub {
-            for my $word (qw( всех )) {
-                return 'ото' if $word eq $_
-            }
-            'от'
-        },
-        'с' => sub {
-            return 'со' if /^мно/;
-            return
-                /^[жзсш][^аеёиоуыэюя]/i
-                ? 'со'
-                : 'с'
-        },
-        # Same rules:
-        'над'   => sub { _check_instrumental('над',   $_) },
-        'под'   => sub { _check_instrumental('под',   $_) },
-        'перед' => sub { _check_instrumental('перед', $_) },
-        'пред'  => sub { _check_instrumental('пред',  $_) },
-    );
-
-    return undef unless exists $GRAMMAR{$preposition};
-
-    $GRAMMAR{$preposition}->($_);
-
-} # sub choose_preposition_by_next_word
-
-# Aliases
-*izo    = sub { choose_preposition_by_next_word 'из',    shift };
-*ko     = sub { choose_preposition_by_next_word 'к',     shift };
-*nado   = sub { choose_preposition_by_next_word 'над',   shift };
-*ob     = sub { choose_preposition_by_next_word 'о',     shift };
-*oto    = sub { choose_preposition_by_next_word 'от',    shift };
-*predo  = sub { choose_preposition_by_next_word 'пред',  shift };
-*peredo = sub { choose_preposition_by_next_word 'перед', shift };
-*podo   = sub { choose_preposition_by_next_word 'под',   shift };
-*so     = sub { choose_preposition_by_next_word 'с',     shift };
-*vo     = sub { choose_preposition_by_next_word 'в',     shift };
-
 # Exceptions:
 
 # Masculine names which ends to vowels “a” and “ya”
 sub _MASCULINE_NAMES () {
     return qw(
-        Аба Азарья Акива Аккужа Аникита Алёша Андрюха Андрюша Аса Байгужа
+        Аба Азарья Акива Аккужа Аникита Алёша Андрюха Андрюша Аса Байгужа Боря
         Вафа Ваня Вася Витя Вова Володя Габдулла Габидулла Гаврила Гадельша
-        Гайнулла Гайса Гайфулла Галиулла Гарри Гата Гдалья Гийора Гиля Гошеа
-        Данила Джиханша Дима Зайнулла Закария Зия Зосима Зхарья Зыя Идельгужа
+        Гайнулла Гайса Гайфулла Галиулла Гарри Гата Гдалья Гийора Гиля Гога Гоша Гошеа
+        Данила Джиханша Дима Жора Зайнулла Закария Зия Зосима Зхарья Зыя Идельгужа
         Иешуа Изя Ильмурза Илья Иона Исайя Иуда Йегошуа Йегуда Йедидья Карагужа Коля
-        Костя Кузьма Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша Моня
+        Костя Кузьма Лёва Лёха Лёша Лука Ларри Марданша Микола Мирза Миха Миша Мойша Моня
         Муртаза Муса Мусса Мустафа Никита Нэта Нэхэмья Овадья Петя Птахья
         Рахматулла Риза Рома Савва Сафа Серёга Серёжа Сила Симха Сэадья Товия
         Толя Федя Фима Фока Фома Хамза Хананья Цфанья Шалва Шахна Шрага Эзра
-        Элиша Элькана Юмагужа Ярулла Яхья Яша
+        Элиша Элькана Юмагужа Юра Ярулла Яхья Яша
     )
 }
 
@@ -641,7 +476,7 @@ L<http://www.imena.org/declension.html> (in Russian) for rules of declension.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2012 Alexander Sapozhnikov.
+Copyright 2009-2014 Alexander Sapozhnikov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

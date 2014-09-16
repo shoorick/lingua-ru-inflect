@@ -7,8 +7,6 @@ t/00-load.t
 t/01-detect-gender.t
 t/02-inflect.t
 t/03-export.t
-t/04-preposition.t
-t/05-short.t
 t/boilerplate.t
 t/pod-coverage.t
 t/pod.t
