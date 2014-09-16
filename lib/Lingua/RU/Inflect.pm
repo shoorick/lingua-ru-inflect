@@ -272,6 +272,7 @@ sub _inflect_given_name {
 
         # Exceptions
         $firstname =~ s/^Пётр$/Петр/;
+        $firstname =~ s/^Христос$/Христ/;
 
         # Names which ends to vowels “o”, “yo”, “u”, “yu”, “y”, “i”, “e”, “ye”
         # and to pairs of vowels except “yeya”, “iya”
@@ -310,6 +311,9 @@ sub _inflect_given_name {
     {
         last unless $lastname;
         last unless defined $gender;
+
+        # Exception
+        $lastname =~ s/^Христос$/Христ/;
 
         # Indeclinable
         last if $lastname =~ /[еёиоуыэю]$/i;

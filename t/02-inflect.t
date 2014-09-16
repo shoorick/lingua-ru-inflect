@@ -50,6 +50,9 @@ ok( join(' ', f( ACCUSATIVE, 'Балаганов', 'Шура' ))
 ok( join(' ', f( INSTRUMENTAL, 'Уолл', 'Ларри' ))
     eq 'Уоллом Ларри ',
     'Instrumental case of english masculine name: Larry Wall' );
+ok( join(' ', f( DATIVE, 'Христос', 'Иисус' ))
+    eq 'Христу Иисусу ',
+    'Dative case of exception: Jesus Christ' );
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
 #     eq 'Бахе Иоганне Себастьяне ',
