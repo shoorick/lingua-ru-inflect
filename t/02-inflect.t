@@ -53,6 +53,9 @@ ok( join(' ', f( INSTRUMENTAL, 'Уолл', 'Ларри' ))
 ok( join(' ', f( DATIVE, 'Христос', 'Иисус' ))
     eq 'Христу Иисусу ',
     'Dative case of exception: Jesus Christ' );
+ok( join(' ', f( GENITIVE, 'Сокол', 'Павел' )) # TODO Change Sokol with Vorobey
+    eq 'Сокола Павла ',
+    'Genitive case of names with fluent vowels: Pavel Sokol' );
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
 #     eq 'Бахе Иоганне Себастьяне ',

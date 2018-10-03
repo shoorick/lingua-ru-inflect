@@ -12,7 +12,7 @@ Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =head1 DESCRIPTION
 
@@ -22,7 +22,8 @@ such as declension of given names (with some nouns and adjectives too),
 and gender detection by given name.
 
 Choosing of proper forms of varying prepositions
-which added in 0.02 now is unavailable because it moved to L<Lingua::RU::Preposition>.
+which added in 0.02 now is unavailable because it moved
+to L<Lingua::RU::Preposition>.
 
 =cut
 
@@ -37,7 +38,7 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
     # set the version for version checking
-    $VERSION     = 0.05;
+    $VERSION     = 0.06;
 
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
@@ -271,6 +272,7 @@ sub _inflect_given_name {
         last unless $firstname;
 
         # Exceptions
+        $firstname =~ s/^Павел$/Павл/;
         $firstname =~ s/^Пётр$/Петр/;
         $firstname =~ s/^Христос$/Христ/;
 
@@ -480,7 +482,7 @@ L<http://www.imena.org/declension.html> (in Russian) for rules of declension.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2014 Alexander Sapozhnikov.
+Copyright 2009-2018 Alexander Sapozhnikov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

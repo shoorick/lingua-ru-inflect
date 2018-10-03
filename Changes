@@ -20,3 +20,6 @@ Revision history for Lingua-RU-Inflect
 
 0.05    16 Sep 2014
         Prepositional function was removed.
+
+0.06    03 Oct 2018
+        Issue #3 was fixed.
