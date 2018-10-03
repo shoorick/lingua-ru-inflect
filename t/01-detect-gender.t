@@ -23,6 +23,10 @@ ok( $M == f( 'Репка', 'Илья' ),
     'russian masculine name ends to vowels without patronym: Ilya Repka' );
 ok( $M == f( 'Ушко', 'Микола' ),
     'ukrainian masculine name ends to vowels without patronym: Mykola Ushko' );
+ok( $M == f( 'Водка', 'Никола' ),
+    'masculine name ends to vowels without patronym: Nikola Vodka' );
+ok( $M == f( 'Саркози', 'Николя' ),
+    'masculine name ends to vowels without patronym: Nikolya Sarkozi (Nicolas Sarkozy)' );
 ok( $M == f( 'Косой', 'Вася' ),
     'name of boy ends to vowels without patronym: Vasya Kosoy' );
 ok( $M == f( 'Балаганов', 'Шура' ),
