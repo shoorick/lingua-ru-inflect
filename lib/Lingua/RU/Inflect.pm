@@ -27,12 +27,6 @@ to L<Lingua::RU::Preposition>.
 
 =cut
 
-our ($REVISION, $DATE);
-($REVISION) = q$Revision$ =~ /(\d+)/g;
-($DATE)
-    = q$Date$ =~ /: (\d+)\s*$/g;
-
-
 BEGIN {
     use Exporter   ();
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
