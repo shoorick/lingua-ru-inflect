@@ -56,6 +56,19 @@ ok( join(' ', f( DATIVE, 'Христос', 'Иисус' ))
 ok( join(' ', f( GENITIVE, 'Сокол', 'Павел' )) # TODO Change Sokol with Vorobey
     eq 'Сокола Павла ',
     'Genitive case of names with fluent vowels: Pavel Sokol' );
+ok( join(' ', f( GENITIVE, 'Кац', 'Лев' ))
+    eq 'Каца Льва ',
+    'Genitive of given name with fluent vowel: Lev Katz' );
+#ok( join(' ', f( GENITIVE, 'Эрлих', 'Вадим' ))
+    #eq 'Эрлиха Вадима ',
+    #'Genitive of last name ends with Kh: Vadim Erlikh' );
+ok( join(' ', f( GENITIVE, 'Читая', 'Автандил' ))
+    eq 'Читая Автандила ',
+    'Genitive of georgian indeclinable lastname: Avtandil Chitaya' );
+ok( join(' ', f( GENITIVE, 'Графин', 'Татьяна' ))
+    eq 'Графин Татьяны ',
+    'Genitive of feminine lastname similar to masculine possessive last name: Tatyana Grafin' );
+
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
 #     eq 'Бахе Иоганне Себастьяне ',

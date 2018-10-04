@@ -323,7 +323,7 @@ sub _inflect_given_name {
         # Lastnames such as “Belaya” and “Sinyaya”
         #  which ends to “aya” and “yaya” must be inflected
         last if $lastname =~ /[ёоуыэю]я$/i;
-        last if $lastname =~ /[иы]х$/i;
+        last if $lastname =~ /[иы]х$/i; # FIXME Ehrlikh must be declinable
 
         # Feminine lastnames
         last
@@ -332,23 +332,30 @@ sub _inflect_given_name {
         # TODO Does not process usual worls: Podkova, Sova etc
         # TODO Decide/search what can I do with ambigous names: Mashina, Vagina etc
 
-        # And masculine ones
-        last
-            if $lastname =~ /(ин|ын|ев|ёв|ов)$/
-            && ( $lastname .= qw(а у а ым е)[$case] );
-
-        # As adjectives
-        last if $lastname =~ s/ая$/qw(ой ой ую ой ой)[$case]/e;
-        last if $lastname =~ s/яя$/qw(ей ей юю ей ей)[$case]/e;
-        last if $lastname =~ s/кий$/qw(кого кому кого ким ком)[$case]/e;
-        last if $lastname =~ s/ий$/qw(его ему его им ем)[$case]/e;
-        last if $lastname =~ s/ый$/qw(ого ому ого ым ом)[$case]/e;
-        last if $lastname =~ s/ой$/qw(ого ому ого ым ом)[$case]/e;
-
         # Rest of masculine lastnames
-        if ( $gender == MASCULINE ) {
+        if ( $gender == FEMININE ) {
+            # As adjectives
+            last if $lastname =~ s/ая$/qw(ой ой ую ой ой)[$case]/e;
+            last if $lastname =~ s/яя$/qw(ей ей юю ей ей)[$case]/e;
+        }
+        else { # MASCULINE
+
+            # Possessive
+            last
+                if $lastname =~ /(ин|ын|ев|ёв|ов)$/
+                && ( $lastname .= qw(а у а ым е)[$case] );
+
+            # Adjective
+            last if $lastname =~ s/кий$/qw(кого кому кого ким ком)[$case]/e;
+            last if $lastname =~ s/ий$/qw(его ему его им ем)[$case]/e;
+            last if $lastname =~ s/ый$/qw(ого ому ого ым ом)[$case]/e;
+            last if $lastname =~ s/ой$/qw(ого ому ого ым ом)[$case]/e;
+
+            # Other
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
             last if $lastname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e;
+
+            last if $lastname =~ /ая$/;
             last if $lastname =~ s/я$/qw(и е ю ёй е)[$case]/e;
             last if $lastname =~ s/й$/qw(я ю й ем е)[$case]/e;
             last if $lastname =~ s/ь$/qw(я ю я ем е)[$case]/e;
