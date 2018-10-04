@@ -201,8 +201,8 @@ sub detect_gender_by_given_name {
     return FEMININE  if $patronym =~ /на$/;
     return MASCULINE if $patronym =~ /[иы]ч$/;
     # Tatar and Azerbaijani
-    return FEMININE  if $patronym =~ /\bкызы$/;
-    return MASCULINE if $patronym =~ /\b(оглы|улы)$/;
+    return FEMININE  if $patronym =~ /\bкызы$/i;
+    return MASCULINE if $patronym =~ /\b(оглы|улы)$/i;
     # Icelandic
     return FEMININE  if $patronym =~ /доттир$/;
     return MASCULINE if $patronym =~ /сон$/;

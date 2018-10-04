@@ -39,6 +39,18 @@ ok( $M == f( 'фон Вебер', 'Карл Мария' ),
     'german masculine name: Carl Maria von Weber' );
 ok( $M == f( 'Руссо', 'Жан-Жак' ),
     'masculine name with hyphen: Jean-Jacques Rousseau' );
+ok( $M == f( undef, undef, 'Айрат-улы' ),
+    'tatar masculine patronym with hyphen: Airat-uly' );
+ok( $M == f( undef, undef, 'Мустафа улы' ),
+    'tatar masculine patronym with space: Mustafa uly' );
+ok( $M == f( undef, undef, 'Ислам-оглы' ),
+    'azerbaijani masculine patronym with hyphen: Islam-ogly' );
+ok( $M == f( undef, undef, 'Ислам оглы' ),
+    'azerbaijani masculine patronym with space: Islam ogly' );
+ok( $M == f( undef, undef, 'Кызылбаевич' ),
+    'masculine patronym with feminine marker inside: Kyzylbayevich' );
+ok( $M == f( undef, 'Эрик', 'Эриксон' ),
+    'icelandic masculine name: Eric Ericsson' );
 
 # Feminine names
 ok( $F == f( 'Волкова', 'Анна', 'Павловна' ),
@@ -55,6 +67,14 @@ ok( $F == f( 'Петрова', 'Женя' ),
     'ambiguous name, detect by lastname: Zhenya Petrova' );
 ok( $F == f( 'Фишер', 'Анна-Мария' ),
     'feminine name with hyphen: Anna-Maria Fisher' );
+ok( $F == f( undef, undef, 'Ренат-кызы' ),
+    'tatar feminine patronym with hyphen: Renat-kyzy' );
+ok( $F == f( undef, undef, 'Ринат кызы' ),
+    'tatar feminine patronym with space: Rinat kyzy' );
+ok( $F == f( undef, undef, 'Улыбаевна' ),
+    'feminine patronym with masculine marker inside: Ulybayevna' );
+ok( $F == f( undef, 'Бьорк', 'Сигурддоттир' ),
+    'icelandic feminine name: Bjork Sigurddottir' );
 
 # Ambigous names
 ok( !defined( f( 'Кац', 'Саша' ) ),
