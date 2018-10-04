@@ -107,8 +107,15 @@ Perhaps a little code snippet.
     # $gender == FEMININE
 
     my @genitive = inflect_given_name(GENITIVE, @name);
-    # $genitive == qw/Петровой Любови Степановны/;
+    # @genitive == qw/Петровой Любови Степановны/;
     # Transliteration of above line is: Petrovoy Lyubovi Stepanovny
+
+One-liners also can be used
+
+    perl -Ilib -Mcommon::sense -MLingua::RU::Inflect=:all \
+    -E 'say join " ", inflect_given_name(GENITIVE, qw/Перец Лев Ильич/)'
+    # Перца Льва Ильича
+    # Transliteration of above line is: Pertsa L'va Il'icha
 
 =head1 TO DO
 
@@ -127,14 +134,10 @@ Or only subs and genders
 
     use Lingua::RU::Inflect qw/:subs :genders/;
 
-Or only short aliases for subs
-
-    use Lingua::RU::Inflect qw/:short/;
-
 Or everything: subs, aliases, genders and case names:
 
     use Lingua::RU::Inflect qw/:all/; # or
-    use Lingua::RU::Inflect qw/:cases :genders :subs :short/;
+    use Lingua::RU::Inflect qw/:cases :genders :subs/;
 
 =head1 FUNCTIONS
 
@@ -330,7 +333,8 @@ sub _inflect_given_name {
             if $lastname =~ /(ин|ын|ев|ёв|ов)а$/
             && $lastname =~ s/а$/qw(ой ой у ой ой)[$case]/e;
         # TODO Does not process usual worls: Podkova, Sova etc
-        # TODO Decide/search what can I do with ambigous names: Mashina, Vagina etc
+        # TODO Decide/search what can I do with ambigous names:
+        # Kalina, Mashina, Smorodina etc
 
         # Rest of masculine lastnames
         if ( $gender == FEMININE ) {
