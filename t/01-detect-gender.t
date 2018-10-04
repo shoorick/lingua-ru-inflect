@@ -33,6 +33,8 @@ ok( $M == f( 'Балаганов', 'Шура' ),
     'ambiguous name, detect by lastname: Shura Balaganov' );
 ok( $M == f( 'Уолл', 'Ларри' ),
     'english masculine name: Larry Wall' );
+ok( $M == f( 'Лори', 'Хью' ),
+    'english masculine name: Hugh Laurie' );
 ok( $M == f( 'Бах', 'Иоганн Себастьян' ),
     'german masculine name: Johann Sebastian Bach' );
 ok( $M == f( 'фон Вебер', 'Карл Мария' ),
@@ -63,6 +65,20 @@ ok( $F == f( 'Шевчук', 'Любовь' ),
     'russian feminine name ends to consonants: Lyubov Shevchuk' );
 ok( $F == f( 'Купер', 'Элис' ),
     'english feminine name ends to consonants: Alice Cooper' );
+ok( $F == f( 'Денёв', 'Катрин' ),
+    'french feminine name ends to consonants: Catherine Deneuve' );
+ok( $F == f( 'Полгар', 'Юдит' ),
+    'hungarian feminine name ends to consonants: Judit Polgar' );
+ok( $F == f( 'Пиаф', 'Эдит' ),
+    'hungarian feminine name ends to consonants: Edith Piaf' );
+ok( $F == f( 'Дитрих', 'Марлен' ),
+    'german feminine name ends to consonants: Marlene Dietrich' );
+ok( $F == f( 'Монро', 'Мерилин' ),
+    'american feminine name ends to consonants: Marilyn Monroe' );
+ok( $F == f( 'Хэпбёрн', 'Одри' ),
+    'british feminine name ends to consonants: Audrey Hepburn' );
+ok( $F == f( 'Тейлор', 'Элизабет' ),
+    'british feminine name ends to consonants: Elizabeth Taylor' );
 ok( $F == f( 'Петрова', 'Женя' ),
     'ambiguous name, detect by lastname: Zhenya Petrova' );
 ok( $F == f( 'Фишер', 'Анна-Мария' ),
