@@ -56,7 +56,6 @@ BEGIN {
     %EXPORT_TAGS = (
         'subs'    => [ qw(
             inflect_given_name detect_gender_by_given_name
-            choose_preposition_by_next_word
         ) ],
         'genders' => [ qw( MASCULINE  FEMININE ) ],
         'cases'   => [ qw(
