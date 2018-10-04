@@ -197,8 +197,15 @@ sub detect_gender_by_given_name {
     my $ambiguous = 0;
 
     # Detect by patronym
-    return FEMININE if $patronym =~ /на$/;
+    # Russian
+    return FEMININE  if $patronym =~ /на$/;
     return MASCULINE if $patronym =~ /[иы]ч$/;
+    # Tatar and Azerbaijani
+    return FEMININE  if $patronym =~ /\bкызы$/;
+    return MASCULINE if $patronym =~ /\b(оглы|улы)$/;
+    # Icelandic
+    return FEMININE  if $patronym =~ /доттир$/;
+    return MASCULINE if $patronym =~ /сон$/;
 
     # Detect by firstname
     # Drop all names except first
