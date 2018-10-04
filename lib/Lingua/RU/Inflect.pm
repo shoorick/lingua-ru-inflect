@@ -83,7 +83,7 @@ my  @CASE_NAMES = qw(
 );
 my  @CASE_NUMBERS = ( -1 .. 4 );
 
-use List::MoreUtils 'mesh';
+use List::MoreUtils qw( any mesh );
 our %CASES = mesh @CASE_NAMES, @CASE_NUMBERS;
 
 # Gender
@@ -212,13 +212,8 @@ sub detect_gender_by_given_name {
     $firstname =~ s/[\s\-].*//;
 
     # Process exceptions
-    map {
-        return MASCULINE if $firstname eq $_;
-    } ( &_MASCULINE_NAMES );
-
-    map {
-        return FEMININE if $firstname eq $_;
-    } ( &_FEMININE_NAMES );
+    return FEMININE  if any { $firstname eq $_ } ( &_FEMININE_NAMES  );
+    return MASCULINE if any { $firstname eq $_ } ( &_MASCULINE_NAMES );
 
     map {
         $ambiguous++ && last if $firstname eq $_;
