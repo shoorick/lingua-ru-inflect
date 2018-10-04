@@ -21,22 +21,76 @@ ok( join(' ', f( DATIVE, 'Ильин', 'Роман' ))
 ok( join(' ', f( DATIVE, 'Ильиных', 'Роман' ))
     eq 'Ильиных Роману ',
     'Dative of russian masculine name with undeclinable lastname and without patronym: Roman Ilyinykh' );
+ok( join(' ', f( DATIVE, 'Бултых', 'Борис' ))
+    eq 'Бултыху Борису ',
+    'Dative of russian masculine lastname with -ykh: Boris Byltykh' );
+ok( join(' ', f( DATIVE, 'Отдых', 'Отто' ))
+    eq 'Отдыху Отто ',
+    'Dative of russian masculine lastname with -ykh: Otto Otdykh' );
+ok( join(' ', f( DATIVE, 'Пых', 'Винстон' ))
+    eq 'Пыху Винстону ',
+    'Dative of russian masculine lastname with -ykh: Winston Pykh' );
+ok( join(' ', f( DATIVE, 'Жмых', 'Жора' ))
+    eq 'Жмыху Жоре ',
+    'Dative of russian masculine lastname with -ykh: Zhora Zhmykh' );
+ok( join(' ', f( DATIVE, 'Карих', 'Карл' ))
+    eq 'Карих Карлу ',
+    'Dative of russian masculine name with undeclinable lastname: Karl Karikh' );
+ok( join(' ', f( DATIVE, 'Сизых', 'Семён' ))
+    eq 'Сизых Семёну ',
+    'Dative of russian masculine name with undeclinable lastname: Semyon Sizykh' );
 ok( join(' ', f( DATIVE, 'Синих', 'Семён' ))
     eq 'Синих Семёну ',
     'Dative of russian masculine name with undeclinable lastname: Semyon Sinikh' );
+ok( join(' ', f( DATIVE, 'Падших', 'Павел' ))
+    eq 'Падших Павлу ',
+    'Dative of russian masculine name with undeclinable lastname: Pavel Padshikh' );
+ok( join(' ', f( DATIVE, 'Шуршащих', 'Шломо' ))
+    eq 'Шуршащих Шломо ',
+    'Dative of russian masculine name with undeclinable lastname: Shlomo Shurshashchikh' );
+ok( join(' ', f( DATIVE, 'Козьих', 'Коля' ))
+    eq 'Козьих Коле ',
+    'Dative of russian masculine name with undeclinable lastname: Kolya Kozyikh' );
 # German lastnames with -kh (-ch)
 ok( join(' ', f( GENITIVE, 'Дитрих', 'Дитер' ))
     eq 'Дитриха Дитера ',
     'Genitive of last name ends with Kh: Dieter Dietrich' );
+ok( join(' ', f( GENITIVE, 'Дидерих', 'Дитер' ))
+    eq 'Дидериха Дитера ',
+    'Genitive of last name ends with Kh: Dieter Diederich' );
+ok( join(' ', f( GENITIVE, 'Диммих', 'Дитер' ))
+    eq 'Диммиха Дитера ',
+    'Genitive of last name ends with Kh: Dieter Dimmich' );
 ok( join(' ', f( GENITIVE, 'Эрлих', 'Эдуард' ))
     eq 'Эрлиха Эдуарда ',
-    'Genitive of last name ends with Kh: Edward Erlikh' );
+    'Genitive of last name ends with Kh: Edward Ehrlich' );
+ok( join(' ', f( GENITIVE, 'Эвих', 'Эдуард' ))
+    eq 'Эвиха Эдуарда ',
+    'Genitive of last name ends with Kh: Edward Ewich' );
+ok( join(' ', f( GENITIVE, 'Фрейндлих', 'Бруно' ))
+    eq 'Фрейндлиха Бруно ',
+    'Genitive of last name ends with Kh: Bruno Freundlich' );
 ok( join(' ', f( GENITIVE, 'Фрейдлих', 'Франц' ))
     eq 'Фрейдлиха Франца ',
-    'Genitive of last name ends with Kh: Franz Freundlich' );
+    'Genitive of last name ends with Kh: Franz Freudlich' );
+ok( join(' ', f( GENITIVE, 'Фрайдих', 'Фриц' ))
+    eq 'Фрайдиха Фрица ',
+    'Genitive of last name ends with Kh: Fritz Freidich' );
 ok( join(' ', f( GENITIVE, 'Миних', 'Макс' ))
     eq 'Миниха Макса ',
     'Genitive of last name ends with Kh: Max Minikh' );
+ok( join(' ', f( GENITIVE, 'Мёглих', 'Макс' ))
+    eq 'Мёглиха Макса ',
+    'Genitive of last name ends with Kh: Max Moeglich' );
+ok( join(' ', f( DATIVE, 'Рерих', 'Николай' ))
+    eq 'Рериху Николаю ',
+    'Dative of masculine lastname ends with -kh: Nickolas Roerich' );
+ok( join(' ', f( DATIVE, 'Рёрих', 'Николай' ))
+    eq 'Рёриху Николаю ',
+    'Dative of masculine lastname ends with -kh: Nickolas Roerich (with yo)' );
+ok( join(' ', f( DATIVE, 'Пих', 'Пауль' ))
+    eq 'Пиху Паулю ',
+    'Dative of masculine lastname ends with -kh: Paul Pich' );
 
 ok( join(' ', f( DATIVE, 'Кох', 'Роман' ))
     eq 'Коху Роману ',
