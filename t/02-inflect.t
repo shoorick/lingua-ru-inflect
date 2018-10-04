@@ -91,9 +91,9 @@ ok( join(' ', f( GENITIVE, 'Боец', 'Павел' ))
 ok( join(' ', f( GENITIVE, 'Отец', 'Павел' ))
     eq 'Отца Павла ',
     'Genitive case of names with fluent vowels: Pavel Otets' );
-ok( join(' ', f( GENITIVE, 'Кац', 'Лев' ))
-    eq 'Каца Льва ',
-    'Genitive of given name with fluent vowel: Lev Katz' );
+ok( join(' ', f( GENITIVE, 'Заяц', 'Лев' ))
+    eq 'Зайца Льва ',
+    'Genitive of given name with fluent vowel: Lev Zayats' );
 
 #ok( join(' ', f( GENITIVE, 'Эрлих', 'Вадим' ))
     #eq 'Эрлиха Вадима ',

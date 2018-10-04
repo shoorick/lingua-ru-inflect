@@ -342,6 +342,7 @@ sub _inflect_given_name {
             $lastname =~ s/([аеёиоуыэюя]л)ец$/$1ьц/i;
             $lastname =~ s/([аеёиоуыэюя][бвгджзкмнйпрстфхцчшщ])ец$/$1ц/i;
             $lastname =~ s/([аеёиоуыэюя])ец$/$1йц/;
+            $lastname =~ s/(З)аяц$/$1айц/;
 
             # Possessive
             last
