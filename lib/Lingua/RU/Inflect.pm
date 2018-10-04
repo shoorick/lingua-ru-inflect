@@ -320,7 +320,10 @@ sub _inflect_given_name {
         # Lastnames such as “Belaya” and “Sinyaya”
         #  which ends to “aya” and “yaya” must be inflected
         last if $lastname =~ /[ёоуыэю]я$/i;
-        last if $lastname =~ /[иы]х$/i; # FIXME Ehrlikh must be declinable
+        last
+            if $lastname =~ /[иы]х$/i
+            && $lastname !~ /^(Аргер|Дитр|Мин|Ульр|Фрейн?дл|Эрл)их$/;
+            # TODO Add more German exceptions
 
         # Feminine lastnames
         last

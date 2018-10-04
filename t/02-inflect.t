@@ -17,9 +17,27 @@ ok( join(' ', f( GENITIVE, 'Иванов', 'Сергей', 'Михайлович
 ok( join(' ', f( DATIVE, 'Ильин', 'Роман' ))
     eq 'Ильину Роману ',
     'Dative of usual russian masculine name without patronym: Roman Ilyin' );
+
 ok( join(' ', f( DATIVE, 'Ильиных', 'Роман' ))
     eq 'Ильиных Роману ',
     'Dative of russian masculine name with undeclinable lastname and without patronym: Roman Ilyinykh' );
+ok( join(' ', f( DATIVE, 'Синих', 'Семён' ))
+    eq 'Синих Семёну ',
+    'Dative of russian masculine name with undeclinable lastname: Semyon Sinikh' );
+# German lastnames with -kh (-ch)
+ok( join(' ', f( GENITIVE, 'Дитрих', 'Дитер' ))
+    eq 'Дитриха Дитера ',
+    'Genitive of last name ends with Kh: Dieter Dietrich' );
+ok( join(' ', f( GENITIVE, 'Эрлих', 'Эдуард' ))
+    eq 'Эрлиха Эдуарда ',
+    'Genitive of last name ends with Kh: Edward Erlikh' );
+ok( join(' ', f( GENITIVE, 'Фрейдлих', 'Франц' ))
+    eq 'Фрейдлиха Франца ',
+    'Genitive of last name ends with Kh: Franz Freundlich' );
+ok( join(' ', f( GENITIVE, 'Миних', 'Макс' ))
+    eq 'Миниха Макса ',
+    'Genitive of last name ends with Kh: Max Minikh' );
+
 ok( join(' ', f( DATIVE, 'Кох', 'Роман' ))
     eq 'Коху Роману ',
     'Dative of russian masculine name with declinable foreign lastname and without patronym: Roman Koch' );
@@ -95,9 +113,6 @@ ok( join(' ', f( GENITIVE, 'Заяц', 'Лев' ))
     eq 'Зайца Льва ',
     'Genitive of given name with fluent vowel: Lev Zayats' );
 
-#ok( join(' ', f( GENITIVE, 'Эрлих', 'Вадим' ))
-    #eq 'Эрлиха Вадима ',
-    #'Genitive of last name ends with Kh: Vadim Erlikh' );
 ok( join(' ', f( GENITIVE, 'Читая', 'Вано' ))
     eq 'Читая Вано ',
     'Genitive of georgian indeclinable names: Vano Chitaya' );
