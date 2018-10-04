@@ -117,7 +117,7 @@ One-liners also can be used
 
 =head1 EXPORT
 
-Function C<detect_gender_by_given_name> and
+Function C<inflect_given_name> and
 C<detect_gender_by_given_name> are exported by default.
 
 Also you can export only case names:
