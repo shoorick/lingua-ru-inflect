@@ -271,6 +271,7 @@ sub _inflect_given_name {
         last unless $firstname;
 
         # Exceptions
+        $firstname =~ s/^Лев$/Льв/;
         $firstname =~ s/^Павел$/Павл/;
         $firstname =~ s/^Пётр$/Петр/;
         $firstname =~ s/^Христос$/Христ/;
