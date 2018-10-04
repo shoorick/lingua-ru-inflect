@@ -12,7 +12,7 @@ Lingua::RU::Inflect - Inflect russian names.
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =head1 DESCRIPTION
 
@@ -38,7 +38,7 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 
     # set the version for version checking
-    $VERSION     = 0.06;
+    $VERSION     = 0.07;
 
     @ISA         = qw(Exporter);
     @EXPORT      = qw(
