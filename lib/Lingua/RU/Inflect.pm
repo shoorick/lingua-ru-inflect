@@ -402,7 +402,7 @@ sub inflect_given_name {
 sub _MASCULINE_NAMES () {
     return qw(
         Аба Азарья Акива Аккужа Аникита Алёша Али Альберто Андрюха Андрюша Аса
-        Байгужа Боря Вафа Ваня Вася Витя Вова Володя Габдулла Габидулла Гаврила
+        Байгужа Боря Вафа Вано Ваня Вася Витя Вова Володя Габдулла Габидулла Гаврила
         Гаврило Гадельша Гайнулла Гайса Гайфулла Галимша Галиулла Гарри Гата
         Гдалья Гийора Гиля Гога Гоша Гошеа Данила Данило Дарко Джанни Джеффри
         Джонни Джошуа Джиханша Дима Жора Зайнулла Закария Зия Зосима Зхарья Зыя
@@ -440,7 +440,7 @@ sub _FEMININE_NAMES () {
 # Ambiguous names which can be masculine and feminine
 sub _AMBIGUOUS_NAMES () {
     return qw(
-        Валя Женя Мина Паша Саша Шура
+        Валя Женя Мина Мишель Паша Саша Шура
     )
 }
 
@@ -495,7 +495,9 @@ at F<RU/Lingua/RU/Inflect.pod>
 
 =head1 ACKNOWLEDGEMENTS
 
-L<http://www.imena.org/declension.html> (in Russian) for rules of declension.
+L<http://www.imena.org/declension.html>
+and L<http://new.gramota.ru/spravka/letters/71-rubric-482>
+(in Russian) for rules of declension.
 
 L<https://www.behindthename.com/> for directory of names.
 

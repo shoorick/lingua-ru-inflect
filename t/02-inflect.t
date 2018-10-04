@@ -98,9 +98,12 @@ ok( join(' ', f( GENITIVE, 'Заяц', 'Лев' ))
 #ok( join(' ', f( GENITIVE, 'Эрлих', 'Вадим' ))
     #eq 'Эрлиха Вадима ',
     #'Genitive of last name ends with Kh: Vadim Erlikh' );
-ok( join(' ', f( GENITIVE, 'Читая', 'Автандил' ))
-    eq 'Читая Автандила ',
-    'Genitive of georgian indeclinable lastname: Avtandil Chitaya' );
+ok( join(' ', f( GENITIVE, 'Читая', 'Вано' ))
+    eq 'Читая Вано ',
+    'Genitive of georgian indeclinable names: Vano Chitaya' );
+ok( join(' ', f( GENITIVE, 'Окуджава', 'Шалва' ))
+    eq 'Окуджавы Шалвы ',
+    'Genitive of georgian masculine names: Shalva Okudjava' );
 ok( join(' ', f( GENITIVE, 'Графин', 'Татьяна' ))
     eq 'Графин Татьяны ',
     'Genitive of feminine lastname similar to masculine possessive last name: Tatyana Grafin' );
