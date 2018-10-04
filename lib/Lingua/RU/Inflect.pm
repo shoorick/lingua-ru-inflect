@@ -352,6 +352,7 @@ sub _inflect_given_name {
             last if $lastname =~ s/ой$/qw(ого ому ого ым ом)[$case]/e;
 
             # Other
+            last if $lastname =~ s/([гжйкхчшщ])а$/$1.qw(и е у ой е)[$case]/e;
             last if $lastname =~ s/а$/qw(ы е у ой е)[$case]/e;
             last if $lastname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e;
 
