@@ -56,12 +56,45 @@ ok( join(' ', f( INSTRUMENTAL, 'Уолл', 'Ларри' ))
 ok( join(' ', f( DATIVE, 'Христос', 'Иисус' ))
     eq 'Христу Иисусу ',
     'Dative case of exception: Jesus Christ' );
-ok( join(' ', f( GENITIVE, 'Сокол', 'Павел' )) # TODO Change Sokol with Vorobey
-    eq 'Сокола Павла ',
-    'Genitive case of names with fluent vowels: Pavel Sokol' );
+
+# Fluent vowels: Pavel → Pavla, Lev → Lva, Konets → Kontsa etc
+ok( join(' ', f( GENITIVE, 'Конец', 'Павел' ))
+    eq 'Конца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Konets' );
+ok( join(' ', f( GENITIVE, 'Конец', 'Яна' ))
+    eq 'Конец Яны ',
+    'Genitive case of feminine names with fluent vowels: Yana Konets' );
+ok( join(' ', f( GENITIVE, 'Жнец', 'Павел' ))
+    eq 'Жнеца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Zhnets' );
+ok( join(' ', f( GENITIVE, 'Игрец', 'Павел' ))
+    eq 'Игреца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Igrets' );
+ok( join(' ', f( GENITIVE, 'Огурец', 'Павел' ))
+    eq 'Огурца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Ogurets' );
+ok( join(' ', f( GENITIVE, 'Молодец', 'Павел' ))
+    eq 'Молодца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Molodets' );
+ok( join(' ', f( GENITIVE, 'Индеец', 'Павел' ))
+    eq 'Индейца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Indeyets' );
+ok( join(' ', f( GENITIVE, 'Индиец', 'Павел' ))
+    eq 'Индийца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Indiyets' );
+ok( join(' ', f( GENITIVE, 'Палец', 'Павел' ))
+    eq 'Пальца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Palets' );
+ok( join(' ', f( GENITIVE, 'Боец', 'Павел' ))
+    eq 'Бойца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Boyets' );
+ok( join(' ', f( GENITIVE, 'Отец', 'Павел' ))
+    eq 'Отца Павла ',
+    'Genitive case of names with fluent vowels: Pavel Otets' );
 ok( join(' ', f( GENITIVE, 'Кац', 'Лев' ))
     eq 'Каца Льва ',
     'Genitive of given name with fluent vowel: Lev Katz' );
+
 #ok( join(' ', f( GENITIVE, 'Эрлих', 'Вадим' ))
     #eq 'Эрлиха Вадима ',
     #'Genitive of last name ends with Kh: Vadim Erlikh' );

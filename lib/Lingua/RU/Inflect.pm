@@ -314,9 +314,6 @@ sub _inflect_given_name {
         last unless $lastname;
         last unless defined $gender;
 
-        # Exception
-        $lastname =~ s/^Христос$/Христ/;
-
         # Indeclinable
         last if $lastname =~ /[еёиоуыэю]$/i;
         last if $lastname =~ /[аеёиоуыэюя]а$/i;
@@ -339,6 +336,12 @@ sub _inflect_given_name {
             last if $lastname =~ s/яя$/qw(ей ей юю ей ей)[$case]/e;
         }
         else { # MASCULINE
+
+            # Exceptions
+            $lastname =~ s/^Христос$/Христ/;
+            $lastname =~ s/([аеёиоуыэюя]л)ец$/$1ьц/i;
+            $lastname =~ s/([аеёиоуыэюя][бвгджзкмнйпрстфхцчшщ])ец$/$1ц/i;
+            $lastname =~ s/([аеёиоуыэюя])ец$/$1йц/;
 
             # Possessive
             last
