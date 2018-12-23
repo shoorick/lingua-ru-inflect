@@ -293,8 +293,21 @@ sub _inflect_given_name {
         last if $firstname =~ s/([гжйкхчшщ])а$/$1.qw(и е у ой е)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
         last if $firstname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e; # common nouns such as “Imya” (Name)
-        last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
         last if $firstname =~ s/й$/qw(я ю я ем е)[$case]/e;
+
+        # Instrumental case of names which end with -ya - see issue #6
+        if ( $case == INSTRUMENTAL && $firstname =~ /я$/ ) {
+            my $use_yo = 0;
+            map {
+                $use_yo++
+                and last
+                    if $_ eq lc $firstname;
+            } ( &_LAST_LETTER_STRESSED_YA );
+            last
+                if $use_yo
+                && $firstname =~ s/я$/ёй/;
+        }
+        last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
 
         # Same endings, but different gender
         if ( $gender == MASCULINE ) {
@@ -476,6 +489,19 @@ sub _AMBIGUOUS_NAMES () {
     return qw(
         Валя Женя Мина Мишель Паша Саша Шура
     )
+}
+
+# Names which have last letter stressed Ya
+# see issue #6 https://github.com/shoorick/lingua-ru-inflect/issues/6
+sub _LAST_LETTER_STRESSED_YA () {
+    return qw(
+        акмая алия альфия бадья верея ворожея галиматья дилия ектенья епитимья
+        жнея змея илья кисея колея курея курья кутья ладья лития манатья мерея
+        мигия мурья ничья палея паремья плачея полынья попадья рыбозмея свинья
+        семья скамья скуфья солея спорынья статья струя судия судья сулея
+        тавлея тафья толчея тулья ханья харатья чешуя шарья швея шемая шлея
+        юрья ячея
+    );
 }
 
 =head1 AUTHOR

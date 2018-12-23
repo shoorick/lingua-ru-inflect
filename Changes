@@ -25,3 +25,6 @@ Revision history for Lingua-RU-Inflect
 0.06    04 Oct 2018
         Issues #3, #4 was fixed.
         Exception lists was extended.
+
+0.07    23 Dec 2018
+        Issue #6 fixed.

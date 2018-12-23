@@ -177,6 +177,23 @@ ok( join(' ', f( GENITIVE, 'Графин', 'Татьяна' ))
     eq 'Графин Татьяны ',
     'Genitive of feminine lastname similar to masculine possessive last name: Tatyana Grafin' );
 
+# issue #6 -ya
+ok( join(' ', f( INSTRUMENTAL, 'Машина', 'Марья' ))
+    eq 'Машиной Марьей ',
+    'Instrumental of name with last unstressed letter Ya: Batareya');
+ok( join(' ', f( INSTRUMENTAL, 'Белая', 'Батарея' ))
+    eq 'Белой Батареей ',
+    'Instrumental of name with last unstressed letter Ya: Marya');
+ok( join(' ', f( INSTRUMENTAL, 'Чужая', 'Колея' ))
+    eq 'Чужой Колеёй ',
+    'Instrumental of name with last stressed letter Ya: Koleya');
+ok( join(' ', f( INSTRUMENTAL, 'Ильин', 'Илья' ))
+    eq 'Ильиным Ильёй ',
+    'Instrumental of name with last stressed letter Ya: Ilya');
+ok( join(' ', f( INSTRUMENTAL, 'Седая', 'Судья' ))
+    eq 'Седой Судьёй ',
+    'Instrumental of name with last stressed letter Ya: Sudya');
+
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
 #     eq 'Бахе Иоганне Себастьяне ',
