@@ -6,7 +6,7 @@ Lingua::RU::Inflect - Склоняет русские имена
 
 =head1 ВЕРСИЯ
 
-Версия 0.06
+Версия 0.07
 
 =head1 ОПИСАНИЕ
 
@@ -142,7 +142,8 @@ C<PREPOSITIONAL> для именительного, родительного, д
 Пожалуйста, присылайте сообщения о найденных неполадках и желаемых
 возможностях на C<bug-lingua-ru-inflect at rt.cpan.org>, или через
 веб-интерфейс на
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>.
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>
+либо L<https://github.com/shoorick/lingua-ru-inflect/issues>.
 Меня известят, и вы будете автоматически оповещены при устранении
 найденных вами неполадок.
 

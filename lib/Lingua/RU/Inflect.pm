@@ -512,7 +512,8 @@ Alexander Sapozhnikov, C<< <shoorick at cpan.org> >>
 
 Please report any bugs or feature requests
 to C<bug-lingua-ru-inflect at rt.cpan.org>, or through the web interface
-at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>.
+at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-RU-Inflect>
+or L<https://github.com/shoorick/lingua-ru-inflect/issues>.
 I will be notified, and then
 you'll automatically be notified of progress on your bug as I make changes.
 
