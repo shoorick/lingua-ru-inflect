@@ -193,6 +193,18 @@ ok( join(' ', f( INSTRUMENTAL, 'Ильин', 'Илья' ))
 ok( join(' ', f( INSTRUMENTAL, 'Седая', 'Судья' ))
     eq 'Седой Судьёй ',
     'Instrumental of name with last stressed letter Ya: Sudya');
+ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Зульфия' ))
+    eq 'Баевой Зульфиёй ',
+    'Instrumental of name with last stressed letter Ya: Zulfiya');
+ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Зуля' ))
+    eq 'Баевой Зулей ',
+    'Instrumental of name with last unstressed letter Ya: Zulya');
+ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Рамиля' ))
+    eq 'Баевой Рамилёй ',
+    'Instrumental of name with last stressed letter Ya: Ramilya');
+ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Танзиля' ))
+    eq 'Баевой Танзилёй ',
+    'Instrumental of name with last stressed letter Ya: Tanzilya');
 
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
