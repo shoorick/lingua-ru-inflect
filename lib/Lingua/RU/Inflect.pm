@@ -289,24 +289,33 @@ sub _inflect_given_name {
             )
             && $firstname =~ /[бвгджзклмнйпрстфхцчшщ]$/i;
 
-        last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
         last if $firstname =~ s/([гжйкхчшщ])а$/$1.qw(и е у ой е)[$case]/e;
         last if $firstname =~ s/а$/qw(ы е у ой е)[$case]/e;
         last if $firstname =~ s/мя$/qw(мени мени мя менем мени)[$case]/e; # common nouns such as “Imya” (Name)
         last if $firstname =~ s/й$/qw(я ю я ем е)[$case]/e;
 
-        # Instrumental case of names which end with -ya - see issue #6
-        if ( $case == INSTRUMENTAL && $firstname =~ /я$/ ) {
-            my $use_yo = 0;
+        # Dative and Instrumental cases of names which end with -ya - see issue #6
+        if ( $firstname =~ /я$/
+            && ( $case == DATIVE || $case == INSTRUMENTAL )
+        ) {
+            my $is_last_vowel_stressed = 0;
             map {
-                $use_yo++
+                $is_last_vowel_stressed++
                 and last
                     if $_ eq lc $firstname;
             } ( &_LAST_LETTER_STRESSED_YA );
-            last
-                if $use_yo
-                && $firstname =~ s/я$/ёй/;
+
+            if ( $is_last_vowel_stressed ) {
+                last
+                    if $case == DATIVE
+                    && $firstname =~ s/я$/е/;
+                last
+                    if $case == INSTRUMENTAL
+                    && $firstname =~ s/я$/ёй/;
+            }
         }
+
+        last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
         last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
 
         # Same endings, but different gender
@@ -500,7 +509,7 @@ sub _AMBIGUOUS_NAMES () {
 # see issue #6 https://github.com/shoorick/lingua-ru-inflect/issues/6
 sub _LAST_LETTER_STRESSED_YA () {
     return qw(
-        акмая алия альфия бадья верея ворожея галиматья дилия ектенья епитимья
+        акмая алия альфия бадья верея ворожея галиматья дария дилия ектенья епитимья
         жнея змея зульфия илья кисея колея курея курья кутья ладья лития манатья мерея
         мигия мурья ничья палея паремья плачея полынья попадья рамиля рыбозмея свинья
         семья скамья скуфья солея спорынья статья струя судия судья сулея

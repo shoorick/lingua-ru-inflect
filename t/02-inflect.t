@@ -222,6 +222,19 @@ ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Рамиля' ))
 ok( join(' ', f( INSTRUMENTAL, 'Баева', 'Танзиля' ))
     eq 'Баевой Танзилёй ',
     'Instrumental of name with last stressed letter Ya: Tanzilya');
+# dative of -iya
+ok( join(' ', f( DATIVE, 'Петрова', 'Мария' ))
+    eq 'Петровой Марии ',
+    'Dative of name with last unstressed letter Ya: Mariya');
+ok( join(' ', f( DATIVE, 'Петрова', 'Марья' ))
+    eq 'Петровой Марье ',
+    'Dative of name with last unstressed letter Ya: Marya');
+ok( join(' ', f( DATIVE, 'Дашина', 'Дарья' ))
+    eq 'Дашиной Дарье ',
+    'Dative of name with last unstressed letter Ya: Darya');
+ok( join(' ', f( DATIVE, 'Давлетбаева', 'Дария' ))
+    eq 'Давлетбаевой Дарие ',
+    'Dative of name with last stressed letter Ya: Dariya');
 
 # Too complex. Wait for next version.
 # ok( join(' ', f( PREPOSITIONAL, 'Бах', 'Иоганн Себастьян' ))
