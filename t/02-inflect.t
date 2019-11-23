@@ -14,6 +14,9 @@ ok( join(' ', f( NOMINATIVE, 'Пупкин', 'Василий', 'Алибабае
 ok( join(' ', f( GENITIVE, 'Иванов', 'Сергей', 'Михайлович' ))
     eq 'Иванова Сергея Михайловича',
     'Genitive of usual russian masculine name: Sergey Mikhailovich Ivanov' );
+ok( join(' ', f( INSTRUMENTAL, 'Львов', 'Лев', 'Львович' ))
+    eq 'Львовым Львом Львовичем',
+    'Instrumental of short russian name with soft sign: Lev Lvovich Lvov' );
 ok( join(' ', f( DATIVE, 'Ильин', 'Роман' ))
     eq 'Ильину Роману ',
     'Dative of usual russian masculine name without patronym: Roman Ilyin' );
@@ -176,6 +179,20 @@ ok( join(' ', f( GENITIVE, 'Окуджава', 'Шалва' ))
 ok( join(' ', f( GENITIVE, 'Графин', 'Татьяна' ))
     eq 'Графин Татьяны ',
     'Genitive of feminine lastname similar to masculine possessive last name: Tatyana Grafin' );
+
+# issue #5 -in
+ok( join(' ', f( INSTRUMENTAL, 'Брин', 'Сергей' ))
+    eq 'Брином Сергеем ',
+    'Instrumental of name with last -in: Brin');
+ok( join(' ', f( INSTRUMENTAL, 'Грин', 'Александр', 'Степанович' ))
+    eq 'Грином Александром Степановичем',
+    'Instrumental of name with last -in: Grin');
+ok( join(' ', f( INSTRUMENTAL, 'Кузьмин', 'Валерий', 'Борисович' ))
+    eq 'Кузьминым Валерием Борисовичем',
+    'Instrumental of name with last -in: Kuzmin');
+ok( join(' ', f( INSTRUMENTAL, 'Рубин', 'Илья' ))
+    eq 'Рубиным Ильёй ',
+    'Instrumental of ambiguous name with last -in: Rubin');
 
 # issue #6 -ya
 ok( join(' ', f( INSTRUMENTAL, 'Машина', 'Марья' ))

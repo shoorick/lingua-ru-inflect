@@ -368,6 +368,11 @@ sub _inflect_given_name {
             $lastname =~ s/(З)аяц$/$1айц/;
 
             # Possessive
+            # see https://github.com/shoorick/lingua-ru-inflect/issues/5
+            last
+                if $lastname =~ /^[^аеёиоуыэюяь]+(ин|ын|ев|ёв|ов)$/
+                && ( $lastname .= qw(а у а ом е)[$case] );
+
             last
                 if $lastname =~ /(ин|ын|ев|ёв|ов)$/
                 && ( $lastname .= qw(а у а ым е)[$case] );
@@ -564,7 +569,7 @@ L<https://www.behindthename.com/> for directory of names.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2018 Alexander Sapozhnikov.
+Copyright 2009-2019 Alexander Sapozhnikov.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
