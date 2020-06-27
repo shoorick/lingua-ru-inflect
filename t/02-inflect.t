@@ -272,6 +272,9 @@ ok( join(' ', f( DATIVE, 'Купер', 'Элис' ))
 ok( join(' ', f( ACCUSATIVE, 'Петрова', 'Женя' ))
     eq 'Петрову Женю ',
     'Accusative of ambiguous name, detect by lastname: Zhenya Petrova' );
+ok( join(' ', f( PREPOSITIONAL, 'Петрова', 'Евгения' ))
+    eq 'Петровой Евгении ',
+    'Prepositional of feminine names ending in -iya' );
 # Too complex. Wait for next version.
 # ok( join(' ', f( INSTRUMENTAL, 'Фишер', 'Анна-Мария' ))
 #     eq 'Фишер Анну-Марию ',
