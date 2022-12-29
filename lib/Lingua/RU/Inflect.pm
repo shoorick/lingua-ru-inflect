@@ -315,7 +315,7 @@ sub _inflect_given_name {
             }
         }
 
-        last if $firstname =~ s/ия$/qw(ии ии ию ией ие)[$case]/e;
+        last if $firstname =~ s/ия$/qw(ии ии ию ией ии)[$case]/e;
         last if $firstname =~ s/я$/qw(и е ю ей е)[$case]/e;
 
         # Same endings, but different gender
